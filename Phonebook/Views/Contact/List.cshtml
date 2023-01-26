@@ -3,14 +3,25 @@
 
 <table>
     <tr>
-        <th>name</th>
+        <th>lastname</th>
+        <th>firstname</th>
+        <th>patronymic</th>
         <th>phone</th>
+        <th>actions</th>
     </tr>
     @foreach (var contact in Model ?? Enumerable.Empty<Contact>())
     {
         <tr>
             <td>@contact.Lastname</td>
+            <td>@contact.Firstname</td>
+            <td>@contact.Patronymic</td>
             <td>@contact.Phonenumber</td>
+            <td>
+                <a asp-controller="Contact" 
+                   asp-action="Show"
+                   asp-route-id="@contact.ContactId"
+                   >show</a>
+            </td>
         </tr>
     }
 </table>
