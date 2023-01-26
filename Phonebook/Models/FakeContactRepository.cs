@@ -36,7 +36,16 @@ namespace Phonebook.Models
 
         public void SaveContact(Contact contact)
         {
-            throw new NotImplementedException();
+            var item = contacts
+                .FirstOrDefault(i => i.ContactId == contact.ContactId);
+            if (item == null)
+            {
+                return;
+            }
+            item.Lastname = contact.Lastname;
+            item.Firstname = contact.Firstname;
+            item.Patronymic = contact.Patronymic;
+            item.Phonenumber = contact.Phonenumber;
         }
 
         private IEnumerable<Contact> GetContacts()

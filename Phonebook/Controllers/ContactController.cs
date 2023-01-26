@@ -47,5 +47,27 @@ namespace Phonebook.Controllers
                 actionName: nameof(this.List),
                 controllerName: "Contact");
         }
+
+        [HttpGet]
+        public ViewResult Edit(int id)
+        {
+            var contact = contactsRepository.Contacts
+                .FirstOrDefault(i => i.ContactId == id);
+            return View(contact);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Contact contact)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(contact);
+            }
+            contactsRepository.SaveContact(contact);
+
+            return RedirectToAction(
+                actionName: nameof(this.List),
+                controllerName: "Contact");
+        }
     }
 }
