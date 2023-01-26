@@ -1,4 +1,16 @@
 ﻿
-<div>
-    List
-</div>
+@model IEnumerable<Contact>
+
+<table>
+    <tr>
+        <th>name</th>
+        <th>phone</th>
+    </tr>
+    @foreach (var contact in Model ?? Enumerable.Empty<Contact>())
+    {
+        <tr>
+            <td>@contact.Lastname</td>
+            <td>@contact.Phonenumber</td>
+        </tr>
+    }
+</table>

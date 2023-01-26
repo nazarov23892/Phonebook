@@ -7,7 +7,7 @@ namespace Phonebook.Models
 {
     public interface IContactRepository
     {
-        public IEnumerable<Contact> Persons { get; }
+        public IEnumerable<Contact> Contacts { get; }
 
         public int AddContact(Contact contact);
 

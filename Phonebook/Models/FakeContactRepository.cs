@@ -9,7 +9,7 @@ namespace Phonebook.Models
     {
         private List<Contact> contacts = new List<Contact>();
 
-        public IEnumerable<Contact> Persons 
+        public IEnumerable<Contact> Contacts 
         {
             get => contacts;
         }
