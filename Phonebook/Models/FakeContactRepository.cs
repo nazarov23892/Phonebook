@@ -54,7 +54,7 @@ namespace Phonebook.Models
             var contacts = JsonSerializer.Deserialize(
                 json: json,
                 returnType: typeof(IEnumerable<Contact>)) as IEnumerable<Contact>;
-            return contacts.Take(10);
+            return contacts;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<Contact>
+@model ContactListViewModel
 @(ViewBag.Title = "list")
 <table>
     <tr>
@@ -9,7 +9,7 @@
         <th>phone</th>
         <th>actions</th>
     </tr>
-    @foreach (var contact in Model ?? Enumerable.Empty<Contact>())
+    @foreach (var contact in Model.Contacts ?? Enumerable.Empty<Contact>())
     {
         <tr>
             <td>@contact.Lastname</td>

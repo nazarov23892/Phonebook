@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Phonebook.Models;
+using Phonebook.Models.ViewModels;
 
 namespace Phonebook.Controllers
 {
@@ -11,14 +12,25 @@ namespace Phonebook.Controllers
     {
         private IContactRepository contactsRepository;
 
+        public int PageSize { get; private set; } = 12;
+
         public ContactController(IContactRepository repository)
         {
             contactsRepository = repository;
         }
 
-        public IActionResult List()
+        public IActionResult List(int page = 1)
         {
-            return View(contactsRepository.Contacts);
+            IEnumerable<Contact> contacts = contactsRepository.Contacts
+                .Take(30);
+            
+            ContactListViewModel viewModel = new ContactListViewModel
+            {
+                PageSize = this.PageSize,
+                Contacts = contacts,
+                PageNo = page
+            };
+            return base.View(viewModel);
         }
 
         public ViewResult Show(int id)
