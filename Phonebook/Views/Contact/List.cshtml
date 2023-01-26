@@ -1,6 +1,6 @@
 ﻿
 @model IEnumerable<Contact>
-
+@(ViewBag.Title = "list")
 <table>
     <tr>
         <th>lastname</th>
@@ -17,14 +17,18 @@
             <td>@contact.Patronymic</td>
             <td>@contact.Phonenumber</td>
             <td>
-                <a asp-controller="Contact" 
-                   asp-action="Show"
-                   asp-route-id="@contact.ContactId"
-                   >show</a>
-                <a asp-controller="Contact"
-                   asp-action="edit"
-                   asp-route-id="@contact.ContactId"
-                   >edit</a>
+                <form method="post"
+                      asp-controller="Contact"
+                      asp-action="Delete">
+                    <input name="id" value="@contact.ContactId" hidden />
+                    <a asp-controller="Contact"
+                       asp-action="show"
+                       asp-route-id="@contact.ContactId">show</a>
+                    <a asp-controller="Contact"
+                       asp-action="edit"
+                       asp-route-id="@contact.ContactId">edit</a>
+                    <button type="submit">delete</button>
+                </form>
             </td>
         </tr>
     }

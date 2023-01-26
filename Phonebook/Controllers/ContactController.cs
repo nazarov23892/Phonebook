@@ -69,5 +69,14 @@ namespace Phonebook.Controllers
                 actionName: nameof(this.List),
                 controllerName: "Contact");
         }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            contactsRepository.DeleteContact(id);
+            return RedirectToAction(
+                actionName: nameof(this.List),
+                controllerName: "Contact");
+        }
     }
 }

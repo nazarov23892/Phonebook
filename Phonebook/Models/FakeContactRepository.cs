@@ -31,7 +31,7 @@ namespace Phonebook.Models
 
         public void DeleteContact(int contactId)
         {
-            throw new NotImplementedException();
+            contacts.RemoveAll(i => i.ContactId == contactId);
         }
 
         public void SaveContact(Contact contact)
