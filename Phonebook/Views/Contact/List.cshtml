@@ -36,3 +36,13 @@
 <a asp-controller="Contact"
    asp-action="Create"
    >add new</a>
+<p>
+    @for (int i = 1; i <= Model.PageCount; i++)
+    {
+        <a asp-controller="Contact"
+           asp-action="List"
+           asp-route-page="@i"
+           >@i</a>
+        @:&nbsp;
+    }
+</p>
