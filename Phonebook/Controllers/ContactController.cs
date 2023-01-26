@@ -20,5 +20,12 @@ namespace Phonebook.Controllers
         {
             return View(contactsRepository.Contacts);
         }
+
+        public ViewResult Show(int id)
+        {
+            var contact = contactsRepository.Contacts
+                .FirstOrDefault(i => i.ContactId == id);
+            return View(contact);
+        }
     }
 }

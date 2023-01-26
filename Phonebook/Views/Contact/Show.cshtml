@@ -1,0 +1,24 @@
+﻿
+@model Contact
+
+<div>
+    <div>
+        <label asp-for="Lastname"></label>
+        <input asp-for="Lastname" disabled />
+    </div>
+    <div>
+        <label asp-for="Firstname"></label>
+        <input asp-for="Firstname" disabled />
+    </div>
+    <div>
+        <label asp-for="Patronymic"></label>
+        <input asp-for="Patronymic" disabled />
+    </div>
+    <div>
+        <label asp-for="Phonenumber"></label>
+        <input asp-for="Phonenumber" disabled />
+    </div>
+    <a asp-controller="Contact" 
+       asp-action="List"
+       >back</a>
+</div>
