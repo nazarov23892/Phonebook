@@ -9,7 +9,7 @@ namespace Phonebook.Models
     {
         public IEnumerable<Contact> Contacts { get; }
 
-        public int AddContact(Contact contact);
+        public void AddContact(Contact contact);
 
         public void SaveContact(Contact contact);
 

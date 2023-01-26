@@ -22,9 +22,11 @@ namespace Phonebook.Models
             contacts.AddRange(GetContacts());
         }
 
-        public int AddContact(Contact contact)
+        public void AddContact(Contact contact)
         {
-            throw new NotImplementedException();
+            int id = 1 + contacts.Max(i => i.ContactId);
+            contact.ContactId = id;
+            contacts.Add(contact);
         }
 
         public void DeleteContact(int contactId)

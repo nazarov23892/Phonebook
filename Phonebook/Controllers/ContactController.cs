@@ -27,5 +27,25 @@ namespace Phonebook.Controllers
                 .FirstOrDefault(i => i.ContactId == id);
             return View(contact);
         }
+
+        [HttpGet]
+        public ViewResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Contact contact)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(contact);
+            }
+
+            contactsRepository.AddContact(contact);
+            return RedirectToAction(
+                actionName: nameof(this.List),
+                controllerName: "Contact");
+        }
     }
 }

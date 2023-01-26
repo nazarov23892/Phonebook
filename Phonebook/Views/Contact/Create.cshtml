@@ -1,0 +1,27 @@
+﻿
+@model Contact
+
+<form method="post" 
+      asp-controller="Contact"
+      asp-action="Create"
+      >
+    <div>
+        <label asp-for="Lastname"></label>
+        <input asp-for="Lastname" />
+    </div>
+    <div>
+        <label asp-for="Firstname"></label>
+        <input asp-for="Firstname" />
+    </div>
+    <div>
+        <label asp-for="Patronymic"></label>
+        <input asp-for="Patronymic" />
+    </div>
+    <div>
+        <label asp-for="Phonenumber"></label>
+        <input asp-for="Phonenumber" />
+    </div>
+    <button type="submit">create</button>
+    <a asp-controller="Contact"
+       asp-action="List">back</a>
+</form>
