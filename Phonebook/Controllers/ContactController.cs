@@ -19,9 +19,12 @@ namespace Phonebook.Controllers
             contactsRepository = repository;
         }
 
-        public IActionResult List(int page = 1, string fname = null)
+        public IActionResult List(int page = 1, string fname = null, string fphone = null)
         {
             var contacts = contactsRepository.Contacts
+                .Where(c=>
+                    String.IsNullOrEmpty(fphone)
+                    || c.Phonenumber.Contains(fphone, StringComparison.OrdinalIgnoreCase))
                 .Where(p => 
                     String.IsNullOrEmpty(fname) 
                     || p.Lastname.Contains(fname, StringComparison.OrdinalIgnoreCase)
@@ -32,7 +35,8 @@ namespace Phonebook.Controllers
                 PageSize = this.PageSize,
                 Contacts = contacts,
                 PageNo = page,
-                FilterName = fname
+                FilterName = fname,
+                FilterPhonenumber = fphone
             };
             return View(viewModel);
         }

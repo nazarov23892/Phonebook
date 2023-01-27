@@ -15,6 +15,8 @@ namespace Phonebook.Models.ViewModels
 
         public string FilterName { get; set; }
 
+        public string FilterPhonenumber { get; set; }
+
         public int PageCount {
             get
             {
