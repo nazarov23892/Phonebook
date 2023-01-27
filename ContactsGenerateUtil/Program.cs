@@ -104,24 +104,34 @@ namespace ContactsGenerateUtil
             string inputFilename = @"C:\nazarov\doc\person-name-list-test--1.txt";
             string outputFilename = @"C:\nazarov\doc\contacts-list-out--1.json";
 
-            IEnumerable<Contact> contacts = ReadContacts(inputFilename);
+            //IEnumerable<Contact> contacts = ReadContacts(inputFilename);
 
-            int id = 1;
-            contacts.ToList()
-                .ForEach(elem =>
-                {
-                    elem.ContactId = id;
-                    elem.Phonenumber = GeneratePhonenumber();
-                    id++;
-                });
+            //int id = 1;
+            //contacts.ToList()
+            //    .ForEach(elem =>
+            //    {
+            //        elem.ContactId = id;
+            //        elem.Phonenumber = GeneratePhonenumber();
+            //        id++;
+            //    });
 
             //PrintContacts(contacts);
 
-            IEnumerable<Contact> contacts2 = contacts;
-            WriteContactsToJson(outputFilename, contacts2);
-           
+            //IEnumerable<Contact> contacts2 = contacts;
+            //WriteContactsToJson(outputFilename, contacts2);
+
             //IEnumerable<Contact> contacts3 = ReadContactsFromJson(outputFilename);
             //PrintContacts(contacts3);
+
+            //string filename1 = @"C:\Users\nazar\source\repos\Phonebook\Phonebook\Data\contacts-items.json";
+            string filename1 = @"contacts-items.json";
+            IEnumerable<Contact> contacts3 = ReadContactsFromJson(filename: filename1);
+            //PrintContacts(contacts3);
+
+            SqlContactsWriter sqlWriter = new SqlContactsWriter();
+            sqlWriter.Contacts = contacts3;
+            int num = sqlWriter.Write();
+            Console.WriteLine($"writed: {num}");
             return;
         }
 
