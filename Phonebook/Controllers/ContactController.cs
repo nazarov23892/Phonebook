@@ -19,18 +19,22 @@ namespace Phonebook.Controllers
             contactsRepository = repository;
         }
 
-        public IActionResult List(int page = 1)
+        public IActionResult List(int page = 1, string fname = null)
         {
-            IEnumerable<Contact> contacts = contactsRepository.Contacts
-                .Take(30);
-            
+            var contacts = contactsRepository.Contacts
+                .Where(p => 
+                    String.IsNullOrEmpty(fname) 
+                    || p.Lastname.Contains(fname, StringComparison.OrdinalIgnoreCase)
+                    || p.Firstname.Contains(fname, StringComparison.OrdinalIgnoreCase));
+
             ContactListViewModel viewModel = new ContactListViewModel
             {
                 PageSize = this.PageSize,
                 Contacts = contacts,
-                PageNo = page
+                PageNo = page,
+                FilterName = fname
             };
-            return base.View(viewModel);
+            return View(viewModel);
         }
 
         public ViewResult Show(int id)

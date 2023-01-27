@@ -13,6 +13,8 @@ namespace Phonebook.Models.ViewModels
 
         public int PageSize { get; set; } = 12;
 
+        public string FilterName { get; set; }
+
         public int PageCount {
             get
             {

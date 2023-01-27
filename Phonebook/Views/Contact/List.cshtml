@@ -1,6 +1,25 @@
 ﻿
 @model ContactListViewModel
-@(ViewBag.Title = "list")
+@{
+    ViewBag.Title = "list";
+}
+
+<form method="get"
+      asp-controller="Contact"
+      asp-action="List">
+    <div>
+        <label>name</label>
+        <input name="fname" value="@Model.FilterName" />
+        <input name="page" value="" hidden />
+        <button type="submit">submit</button>
+        <a asp-controller="Contact"
+           asp-action="list"
+           asp-route-pageNo=""
+           asp-route-filterName=""
+           >reset</a>
+    </div>
+</form>
+<p></p>
 <table>
     <tr>
         <th>lastname</th>
@@ -34,14 +53,14 @@
     }
 </table>
 <a asp-controller="Contact"
-   asp-action="Create"
-   >add new</a>
+   asp-action="Create">add new</a>
 <p>
     @for (int i = 1; i <= Model.PageCount; i++)
     {
         <a asp-controller="Contact"
            asp-action="List"
            asp-route-page="@i"
+           asp-route-fname="@Model.FilterName"
            >@i</a>
         @:&nbsp;
     }
