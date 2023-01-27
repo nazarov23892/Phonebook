@@ -19,16 +19,35 @@ namespace Phonebook.Controllers
             contactsRepository = repository;
         }
 
-        public IActionResult List(int page = 1, string fname = null, string fphone = null)
+        public IActionResult List(int page = 1, string fname = null, string fphone = null,
+            string fsort = null)
         {
-            var contacts = contactsRepository.Contacts
-                .Where(c=>
-                    String.IsNullOrEmpty(fphone)
-                    || c.Phonenumber.Contains(fphone, StringComparison.OrdinalIgnoreCase))
-                .Where(p => 
-                    String.IsNullOrEmpty(fname) 
-                    || p.Lastname.Contains(fname, StringComparison.OrdinalIgnoreCase)
-                    || p.Firstname.Contains(fname, StringComparison.OrdinalIgnoreCase));
+            var contacts = contactsRepository.Contacts;
+            if (fsort == "lastname-asc")
+            {
+                contacts = contacts.OrderBy(keySelector: c => c.Lastname);
+            }
+            else if (fsort == "lastname-desc")
+            {
+                contacts = contacts.OrderByDescending(keySelector: c => c.Lastname);
+            }
+            else if (fsort == "firstname-asc")
+            {
+                contacts = contacts.OrderBy(keySelector: c => c.Firstname);
+            }
+            else if (fsort == "firstname-desc")
+            {
+                contacts = contacts.OrderByDescending(keySelector: c => c.Firstname);
+            }
+
+            contacts = contacts
+            .Where(c =>
+                String.IsNullOrEmpty(fphone)
+                || c.Phonenumber.Contains(fphone, StringComparison.OrdinalIgnoreCase))
+            .Where(p =>
+                String.IsNullOrEmpty(fname)
+                || p.Lastname.Contains(fname, StringComparison.OrdinalIgnoreCase)
+                || p.Firstname.Contains(fname, StringComparison.OrdinalIgnoreCase));
 
             ContactListViewModel viewModel = new ContactListViewModel
             {
@@ -36,7 +55,8 @@ namespace Phonebook.Controllers
                 Contacts = contacts,
                 PageNo = page,
                 FilterName = fname,
-                FilterPhonenumber = fphone
+                FilterPhonenumber = fphone,
+                SortOption = fsort
             };
             return View(viewModel);
         }

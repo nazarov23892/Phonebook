@@ -1,10 +1,13 @@
 ﻿
 @model ContactListViewModel
 
+@{ 
+    Dictionary<string, string> sortOptionDict = ViewBag.SortOption;
+}
+
 <form method="get"
       asp-controller="Contact"
       asp-action="List">
-
     <input name="page" value="" hidden />
     <div>
         <label>name</label>
@@ -13,6 +16,20 @@
     <div>
         <label>phone</label>
         <input name="fphone" value="@Model.FilterPhonenumber" />
+    </div>
+    <div>
+        <label>sort</label>
+        <select name="fsort">
+            @foreach (var item in sortOptionDict)
+            {
+                if (item.Key == Model.SortOption)
+                {
+                    <option label="@item.Value" value="@item.Key" selected></option>
+                    continue;
+                }
+                <option label="@item.Value" value="@item.Key"></option>
+            }
+        </select>
     </div>
     <button type="submit">submit</button>
     <a asp-controller="Contact"
