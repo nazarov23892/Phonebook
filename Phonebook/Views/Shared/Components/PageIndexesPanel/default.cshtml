@@ -1,0 +1,14 @@
+﻿@model ContactListViewModel
+
+<div>
+    @for (int i = 1; i <= Model.PageCount; i++)
+    {
+        <a asp-controller="Contact"
+           asp-action="List"
+           asp-route-page="@i"
+           asp-route-fname="@Model.FilterName"
+           asp-route-fphone="@Model.FilterPhonenumber"
+           >@i</a>
+        @:&nbsp;
+    }
+</div>
