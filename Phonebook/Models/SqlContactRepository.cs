@@ -87,9 +87,10 @@ namespace Phonebook.Models
                 new SqlParameter { ParameterName = "@patronymic", Value = contact.Patronymic },
                 new SqlParameter { ParameterName = "@phonenumber", Value = contact.Phonenumber }
             };
-            var result = ExecuteSqlScalar(
+            var result = ExecuteSqlCommand(
                 sqlCommand: insertCommandString,
-                sqlParameters: parameters) as decimal?;
+                sqlParameters: parameters,
+                sqlExecuteMode: CommandExecuteMode.Scalar) as decimal?;
             return;
         }
 
@@ -98,9 +99,10 @@ namespace Phonebook.Models
             var parameters = new[] {
                 new SqlParameter { ParameterName = "@contactId", Value = contactId }
             };
-            var result = ExecuteSqlNonQuery(
+            var result = ExecuteSqlCommand(
                 sqlCommand: deleteCommandString,
-                sqlParameters: parameters);
+                sqlParameters: parameters,
+                sqlExecuteMode: CommandExecuteMode.NonQuery) as int?;
             return;
         }
 
@@ -113,48 +115,39 @@ namespace Phonebook.Models
                 new SqlParameter { ParameterName = "@patronymic", Value = contact.Patronymic },
                 new SqlParameter { ParameterName = "@phonenumber", Value = contact.Phonenumber }
             };
-            var result = ExecuteSqlNonQuery(
+            var result = ExecuteSqlCommand(
                 sqlCommand: updateCommandString,
-                sqlParameters: parameters);
+                sqlParameters: parameters,
+                sqlExecuteMode: CommandExecuteMode.NonQuery) as int?;
             return;
         }
 
-        private int ExecuteSqlNonQuery(string sqlCommand, IEnumerable<SqlParameter> sqlParameters)
+        private object ExecuteSqlCommand(string sqlCommand, IEnumerable<SqlParameter> sqlParameters, CommandExecuteMode sqlExecuteMode)
         {
-            int scalarResult = 0;
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
-            {
-                sqlConnection.Open();
-                SqlCommand command = new SqlCommand(cmdText: sqlCommand, connection: sqlConnection);
-                foreach (var param in sqlParameters ?? Enumerable.Empty<SqlParameter>())
-                {
-                    command.Parameters.Add(param);
-                }
-                scalarResult = command.ExecuteNonQuery();
-                sqlConnection.Close();
-            }
-            return scalarResult;
-        }
-
-        private object ExecuteSqlScalar (string sqlCommand, IEnumerable<SqlParameter> sqlParameters)
-        {
-            object scalarResult;
+            object result;
             using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
             {
                 sqlConnection.Open();
                 using (SqlCommand command = new SqlCommand(
-                    cmdText: sqlCommand, 
+                    cmdText: sqlCommand,
                     connection: sqlConnection))
                 {
                     foreach (var param in sqlParameters ?? Enumerable.Empty<SqlParameter>())
                     {
                         command.Parameters.Add(param);
                     }
-                    scalarResult = command.ExecuteScalar();
+                    result = sqlExecuteMode == CommandExecuteMode.Scalar
+                        ? command.ExecuteScalar()
+                        : command.ExecuteNonQuery();
                 }
                 sqlConnection.Close();
             }
-            return scalarResult;
+            return result;
+        }
+
+        private enum CommandExecuteMode
+        {
+            Scalar, NonQuery
         }
     }
 }
