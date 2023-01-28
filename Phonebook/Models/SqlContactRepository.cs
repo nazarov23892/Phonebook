@@ -20,7 +20,7 @@ namespace Phonebook.Models
             from
                 Contacts c";
 
-        private const string insertString =
+        private const string insertCommandString =
             @"insert 
                 into 
             [Contacts] 
@@ -29,7 +29,7 @@ namespace Phonebook.Models
                 (@lastname, @firstname, @patronymic, @phonenumber);
             SELECT SCOPE_IDENTITY(); ";
 
-        private const string updateString =
+        private const string updateCommandString =
            @"UPDATE [c]
             SET 
                 [c].[Lastname] = @lastname,
@@ -39,7 +39,7 @@ namespace Phonebook.Models
             FROM [Contacts] c
             WHERE [c].[ContactId] = @contactId ";
 
-        private const string deleteString =
+        private const string deleteCommandString =
             @"delete [c]
             from [Contacts] c
             where [c].[ContactId] = @contactId ";
@@ -81,88 +81,80 @@ namespace Phonebook.Models
 
         public void AddContact(Contact contact)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(
-                connectionString: connectionString))
-            {
-                using (SqlCommand sqlCommand = new SqlCommand(
-                    cmdText: insertString,
-                    connection: sqlConnection))
-                {
-                    sqlConnection.Open();
-
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@lastname" });
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@firstname" });
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@patronymic" });
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@phonenumber" });
-
-                    sqlCommand.Parameters["@lastname"].Value = contact.Lastname;
-                    sqlCommand.Parameters["@firstname"].Value = contact.Firstname;
-                    sqlCommand.Parameters["@patronymic"].Value = contact.Patronymic;
-                    sqlCommand.Parameters["@phonenumber"].Value = contact.Phonenumber;
-
-                    var result = sqlCommand.ExecuteScalar() as decimal?;
-                    sqlConnection.Close();
-                }
-            }
+            var parameters = new[] {
+                new SqlParameter { ParameterName = "@lastname", Value = contact.Lastname },
+                new SqlParameter { ParameterName = "@firstname", Value = contact.Firstname },
+                new SqlParameter { ParameterName = "@patronymic", Value = contact.Patronymic },
+                new SqlParameter { ParameterName = "@phonenumber", Value = contact.Phonenumber }
+            };
+            var result = ExecuteSqlScalar(
+                sqlCommand: insertCommandString,
+                sqlParameters: parameters) as decimal?;
+            return;
         }
 
         public void DeleteContact(int contactId)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(
-                   connectionString: connectionString))
-            {
-                using (SqlCommand sqlCommand = new SqlCommand(
-                    cmdText: deleteString,
-                    connection: sqlConnection))
-                {
-                    sqlConnection.Open();
-
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@contactId" });
-
-                    sqlCommand.Parameters["@contactId"].Value = contactId;
-                    var result = sqlCommand.ExecuteNonQuery();
-                    sqlConnection.Close();
-                }
-            }
+            var parameters = new[] {
+                new SqlParameter { ParameterName = "@contactId", Value = contactId }
+            };
+            var result = ExecuteSqlNonQuery(
+                sqlCommand: deleteCommandString,
+                sqlParameters: parameters);
+            return;
         }
 
         public void SaveContact(Contact contact)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(
-                connectionString: connectionString))
+            var parameters = new[] {
+                new SqlParameter { ParameterName = "@contactId", Value = contact.ContactId },
+                new SqlParameter { ParameterName = "@lastname", Value = contact.Lastname },
+                new SqlParameter { ParameterName = "@firstname", Value = contact.Firstname },
+                new SqlParameter { ParameterName = "@patronymic", Value = contact.Patronymic },
+                new SqlParameter { ParameterName = "@phonenumber", Value = contact.Phonenumber }
+            };
+            var result = ExecuteSqlNonQuery(
+                sqlCommand: updateCommandString,
+                sqlParameters: parameters);
+            return;
+        }
+
+        private int ExecuteSqlNonQuery(string sqlCommand, IEnumerable<SqlParameter> sqlParameters)
+        {
+            int scalarResult = 0;
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
             {
-                using (SqlCommand sqlCommand = new SqlCommand(
-                    cmdText: updateString,
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand(cmdText: sqlCommand, connection: sqlConnection);
+                foreach (var param in sqlParameters ?? Enumerable.Empty<SqlParameter>())
+                {
+                    command.Parameters.Add(param);
+                }
+                scalarResult = command.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+            return scalarResult;
+        }
+
+        private object ExecuteSqlScalar (string sqlCommand, IEnumerable<SqlParameter> sqlParameters)
+        {
+            object scalarResult;
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
+            {
+                sqlConnection.Open();
+                using (SqlCommand command = new SqlCommand(
+                    cmdText: sqlCommand, 
                     connection: sqlConnection))
                 {
-                    sqlConnection.Open();
-
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@contactId" });
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@lastname" });
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@firstname" });
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@patronymic" });
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@phonenumber" });
-
-                    sqlCommand.Parameters["@contactId"].Value = contact.ContactId;
-                    sqlCommand.Parameters["@lastname"].Value = contact.Lastname;
-                    sqlCommand.Parameters["@firstname"].Value = contact.Firstname;
-                    sqlCommand.Parameters["@patronymic"].Value = contact.Patronymic;
-                    sqlCommand.Parameters["@phonenumber"].Value = contact.Phonenumber;
-
-                    var result = sqlCommand.ExecuteNonQuery();
-                    sqlConnection.Close();
+                    foreach (var param in sqlParameters ?? Enumerable.Empty<SqlParameter>())
+                    {
+                        command.Parameters.Add(param);
+                    }
+                    scalarResult = command.ExecuteScalar();
                 }
+                sqlConnection.Close();
             }
+            return scalarResult;
         }
     }
 }
