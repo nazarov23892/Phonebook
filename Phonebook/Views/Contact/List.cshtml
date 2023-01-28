@@ -4,41 +4,51 @@
     ViewBag.Title = "list";
 }
 
-@(await Component.InvokeAsync("FilterPanel"))
+<div class="row">
+    <div class="col-sm-2">
+        @(await Component.InvokeAsync("FilterPanel"))
+    </div>
 
-<table>
-    <tr>
-        <th>lastname</th>
-        <th>firstname</th>
-        <th>patronymic</th>
-        <th>phone</th>
-        <th>actions</th>
-    </tr>
-    @foreach (var contact in Model.Contacts ?? Enumerable.Empty<Contact>())
-    {
-        <tr>
-            <td>@contact.Lastname</td>
-            <td>@contact.Firstname</td>
-            <td>@contact.Patronymic</td>
-            <td>@contact.Phonenumber</td>
-            <td>
-                <form method="post"
-                      asp-controller="Contact"
-                      asp-action="Delete">
-                    <input name="id" value="@contact.ContactId" hidden />
-                    <a asp-controller="Contact"
-                       asp-action="show"
-                       asp-route-id="@contact.ContactId">show</a>
-                    <a asp-controller="Contact"
-                       asp-action="edit"
-                       asp-route-id="@contact.ContactId">edit</a>
-                    <button type="submit">delete</button>
-                </form>
-            </td>
-        </tr>
-    }
-</table>
-<a asp-controller="Contact"
-   asp-action="Create">add new</a>
+    <div class="col col-sm-9">
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <th>lastname</th>
+                <th>firstname</th>
+                <th>patronymic</th>
+                <th>phone</th>
+                <th>actions</th>
+            </tr>
+            @foreach (var contact in Model.Contacts ?? Enumerable.Empty<Contact>())
+            {
+                <tr>
+                    <td>@contact.Lastname</td>
+                    <td>@contact.Firstname</td>
+                    <td>@contact.Patronymic</td>
+                    <td>@contact.Phonenumber</td>
+                    <td>
+                        <form method="post"
+                              asp-controller="Contact"
+                              asp-action="Delete">
+                            <input name="id" value="@contact.ContactId" hidden />
+                            <a asp-controller="Contact"
+                               asp-action="show"
+                               asp-route-id="@contact.ContactId"
+                               class="btn btn-primary btn-sm">show</a>
+                            <a asp-controller="Contact"
+                               asp-action="edit"
+                               asp-route-id="@contact.ContactId"
+                               class="btn btn-primary btn-sm">edit</a>
+                            <button type="submit"
+                                    class="btn btn-danger btn-sm">delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+        <a asp-controller="Contact"
+           asp-action="Create"
+           class="btn btn-primary btn-sm">add new</a>
 
-@(await Component.InvokeAsync("PageIndexesPanel"))
+        @(await Component.InvokeAsync("PageIndexesPanel"))
+    </div>
+</div>
