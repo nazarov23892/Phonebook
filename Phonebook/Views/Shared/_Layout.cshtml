@@ -4,9 +4,15 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <link rel="stylesheet" asp-href-include="lib/bootstrap/dist/css/*.min.css" />
 </head>
 <body>
-    <div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <b>PHONEBOOK WEB</b>
+            </div>
+        </div>
         @RenderBody()
     </div>
 </body>
