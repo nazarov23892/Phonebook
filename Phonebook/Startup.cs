@@ -30,6 +30,7 @@ namespace Phonebook
                 app.UseDeveloperExceptionPage();
             }
             app.UseStatusCodePages();
+            app.UseStaticFiles();
             app.UseMvc(config =>
             {
                 config.MapRoute(
