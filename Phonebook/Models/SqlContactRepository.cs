@@ -18,7 +18,15 @@ namespace Phonebook.Models
                 c.Patronymic, 
                 c.Phonenumber
             from
-                Contacts c";
+                Contacts c
+            where
+                c.Phonenumber like(@phonenumber)
+                and 
+                (
+                c.Firstname like(@name) 
+                or c.Lastname like(@name) 
+                or c.Patronymic like(@name)
+                ) ";
 
         private const string insertCommandString =
             @"insert 
@@ -48,30 +56,45 @@ namespace Phonebook.Models
         {
             get => GetContacts();
         }
+        public string FilterName { get; set; }
+        public string FilterPhone { get; set; }
+        public string SortColumn { get; set ; }
+        public SortDirection SortDirection { get; set; }
 
         private IEnumerable<Contact> GetContacts()
         {
             List<Contact> contacts = new List<Contact>();
+
+            string sqlSelect = String.IsNullOrEmpty(SortColumn)
+                    ? selectString
+                    : selectString + GetSqlOrderSection(SortColumn, SortDirection);
+
             using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
             {
-                sqlConnection.Open();
-                SqlCommand sqlCommand = new SqlCommand(
-                    cmdText: selectString, 
-                    connection: sqlConnection);
-               
-                using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
+                sqlConnection.Open();;
+                using (SqlCommand sqlCommand = new SqlCommand(
+                    cmdText: sqlSelect,
+                    connection: sqlConnection))
                 {
-                    while (sqlReader.Read())
+                    sqlCommand.Parameters.Add(
+                        new SqlParameter {ParameterName = "@name", Value = $"%{FilterName}%" });
+                    sqlCommand.Parameters.Add(
+                        new SqlParameter { ParameterName = "@phonenumber", Value = $"%{FilterPhone}%" });
+
+                    using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
                     {
-                        Contact contact = new Contact
+                        while (sqlReader.Read())
                         {
-                            ContactId = sqlReader.GetFieldValue<int>(sqlReader.GetOrdinal("ContactId")),
-                            Lastname = sqlReader["Lastname"] as string,
-                            Firstname = sqlReader["Firstname"] as string,
-                            Patronymic = sqlReader["Patronymic"] as string,
-                            Phonenumber = sqlReader["Phonenumber"] as string
-                        };
-                        contacts.Add(contact);
+                            Contact contact = new Contact
+                            {
+                                ContactId = sqlReader.GetFieldValue<int>(sqlReader.GetOrdinal("ContactId")),
+                                Lastname = sqlReader["Lastname"] as string,
+                                Firstname = sqlReader["Firstname"] as string,
+                                Patronymic = sqlReader["Patronymic"] as string,
+                                Phonenumber = sqlReader["Phonenumber"] as string
+                            };
+                            contacts.Add(contact);
+                        }
                     }
                 }
                 sqlConnection.Close();
@@ -143,6 +166,12 @@ namespace Phonebook.Models
                 sqlConnection.Close();
             }
             return result;
+        }
+
+        private string GetSqlOrderSection(string columnName, SortDirection sortDir)
+        {
+            string sort = sortDir == SortDirection.Descending ? "desc" : "asc";
+            return $"order by c.{columnName} {sort}";
         }
 
         private enum CommandExecuteMode

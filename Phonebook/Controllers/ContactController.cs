@@ -22,33 +22,33 @@ namespace Phonebook.Controllers
         public IActionResult List(int page = 1, string fname = null, string fphone = null,
             string fsort = null)
         {
-            var contacts = contactsRepository.Contacts;
+            var sortOption = (Column: "", SortDir: SortDirection.Ascending);
             if (fsort == "lastname-asc")
             {
-                contacts = contacts.OrderBy(keySelector: c => c.Lastname);
+                sortOption.Column = "Lastname";
+                sortOption.SortDir = SortDirection.Ascending;
             }
             else if (fsort == "lastname-desc")
             {
-                contacts = contacts.OrderByDescending(keySelector: c => c.Lastname);
+                sortOption.Column = "Lastname";
+                sortOption.SortDir = SortDirection.Descending;
             }
             else if (fsort == "firstname-asc")
             {
-                contacts = contacts.OrderBy(keySelector: c => c.Firstname);
+                sortOption.Column = "Firstname";
+                sortOption.SortDir = SortDirection.Ascending;
             }
             else if (fsort == "firstname-desc")
             {
-                contacts = contacts.OrderByDescending(keySelector: c => c.Firstname);
+                sortOption.Column = "Firstname";
+                sortOption.SortDir = SortDirection.Descending;
             }
+            contactsRepository.SortColumn = sortOption.Column;
+            contactsRepository.SortDirection = sortOption.SortDir;
+            contactsRepository.FilterName = fname;
+            contactsRepository.FilterPhone = fphone;
 
-            contacts = contacts
-            .Where(c =>
-                String.IsNullOrEmpty(fphone)
-                || c.Phonenumber.Contains(fphone, StringComparison.OrdinalIgnoreCase))
-            .Where(p =>
-                String.IsNullOrEmpty(fname)
-                || p.Lastname.Contains(fname, StringComparison.OrdinalIgnoreCase)
-                || p.Firstname.Contains(fname, StringComparison.OrdinalIgnoreCase));
-
+            IEnumerable<Contact> contacts = contactsRepository.Contacts;
             ContactListViewModel viewModel = new ContactListViewModel
             {
                 PageSize = this.PageSize,

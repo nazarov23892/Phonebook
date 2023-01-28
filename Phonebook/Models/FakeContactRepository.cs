@@ -16,6 +16,10 @@ namespace Phonebook.Models
         {
             get => contacts;
         }
+        public string FilterName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string FilterPhone { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string SortColumn { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public SortDirection SortDirection { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public FakeContactRepository()
         {
