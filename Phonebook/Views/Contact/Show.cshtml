@@ -1,24 +1,30 @@
 ﻿
 @model Contact
 
-<div>
-    <div>
+<div class="col-sm-1"></div>
+<div class="col col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>View Form</h4>
+        </div>
+    </div>
+    <div class="form-group">
         <label asp-for="Lastname"></label>
-        <input asp-for="Lastname" disabled />
+        <input asp-for="Lastname" class="form-control" disabled />
     </div>
-    <div>
+    <div class="form-group">
         <label asp-for="Firstname"></label>
-        <input asp-for="Firstname" disabled />
+        <input asp-for="Firstname" class="form-control" disabled />
     </div>
-    <div>
+    <div class="form-group">
         <label asp-for="Patronymic"></label>
-        <input asp-for="Patronymic" disabled />
+        <input asp-for="Patronymic" class="form-control" disabled />
     </div>
-    <div>
+    <div class="form-group">
         <label asp-for="Phonenumber"></label>
-        <input asp-for="Phonenumber" disabled />
+        <input asp-for="Phonenumber" class="form-control" disabled />
     </div>
-    <a asp-controller="Contact" 
+    <a asp-controller="Contact"
        asp-action="List"
-       >back</a>
+       class="btn btn-default">back</a>
 </div>
