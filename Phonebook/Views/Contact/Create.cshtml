@@ -1,27 +1,36 @@
 ﻿
 @model Contact
 
-<form method="post" 
-      asp-controller="Contact"
-      asp-action="Create"
-      >
-    <div>
-        <label asp-for="Lastname"></label>
-        <input asp-for="Lastname" />
+<div class="col-sm-1"></div>
+<div class="col col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Creation form</h4>
+        </div>
     </div>
-    <div>
-        <label asp-for="Firstname"></label>
-        <input asp-for="Firstname" />
-    </div>
-    <div>
-        <label asp-for="Patronymic"></label>
-        <input asp-for="Patronymic" />
-    </div>
-    <div>
-        <label asp-for="Phonenumber"></label>
-        <input asp-for="Phonenumber" />
-    </div>
-    <button type="submit">create</button>
-    <a asp-controller="Contact"
-       asp-action="List">back</a>
-</form>
+    <form method="post"
+            asp-controller="Contact"
+            asp-action="Create">
+        <div class="form-group">
+            <label asp-for="Lastname"></label>
+            <input asp-for="Lastname" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Firstname"></label>
+            <input asp-for="Firstname" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Patronymic"></label>
+            <input asp-for="Patronymic" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Phonenumber"></label>
+            <input asp-for="Phonenumber" class="form-control"/>
+        </div>
+        <button type="submit"
+                class="btn btn-primary">create</button>
+        <a asp-controller="Contact"
+           asp-action="List"
+           class="btn btn-default">back</a>
+    </form>
+</div>
