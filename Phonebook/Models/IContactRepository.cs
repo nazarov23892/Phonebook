@@ -13,6 +13,8 @@ namespace Phonebook.Models
         public string SortColumn { get; set; }
         public SortDirection SortDirection { get; set; }
 
+        public Contact GetContact(int contactId);
+
         public void AddContact(Contact contact);
 
         public void SaveContact(Contact contact);

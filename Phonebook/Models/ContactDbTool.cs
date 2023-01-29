@@ -29,6 +29,18 @@ namespace Phonebook.Models
                 or c.Patronymic like(@name)
                 ) ";
 
+        private const string selectByIdString =
+            @"select 
+                c.ContactId, 
+                c.Lastname, 
+                c.Firstname, 
+                c.Patronymic, 
+                c.Phonenumber
+            from
+                Contacts c
+            where
+                c.ContactId = @contactId ";
+
         private const string insertCommandString =
             @"insert 
                 into 
@@ -102,6 +114,33 @@ namespace Phonebook.Models
             return result.HasValue
                 ? result.Value
                 : 0;
+        }
+
+        public void SelectById(int contactId, Action<IDataRecord> itemRowReadedFunc)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand(
+                    cmdText: selectByIdString,
+                    connection: sqlConnection))
+                {
+                    sqlConnection.Open();
+                    sqlCommand.Parameters.Add(new SqlParameter { ParameterName = "@contactId", Value = contactId });
+
+                    using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
+                    {
+                        if (sqlReader != null && sqlReader.HasRows)
+                        {
+                            while (sqlReader.Read())
+                            {
+                                itemRowReadedFunc(sqlReader);
+                            }
+                        }
+                    }
+                    sqlConnection.Close();
+                }
+            }
+            return;
         }
 
         public void Select(string filterName, string filterPhone, string sortColumn, OrderDirection orderDirection, Action<IDataRecord> itemRowReadedFunc)

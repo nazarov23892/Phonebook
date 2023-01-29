@@ -60,5 +60,10 @@ namespace Phonebook.Models
                 returnType: typeof(IEnumerable<Contact>)) as IEnumerable<Contact>;
             return contacts;
         }
+
+        public Contact GetContact(int contactId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

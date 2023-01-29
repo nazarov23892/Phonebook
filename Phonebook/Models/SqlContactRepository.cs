@@ -55,6 +55,37 @@ namespace Phonebook.Models
             return contacts;
         }
 
+        public Contact GetContact(int contactId)
+        {
+            int count = 0;
+            List<Contact> contacts = new List<Contact>();
+            contactsDbTool.SelectById(
+                contactId: contactId,
+                itemRowReadedFunc: row =>
+                {
+                    int personId2 = row.GetInt32(row.GetOrdinal("ContactId"));
+                    string lastName = row["Lastname"] as string;
+                    string firstname = row["Firstname"] as string;
+                    string patronimic = row["Patronymic"] as string;
+                    string phonenumber = row["Phonenumber"] as string;
+
+                    contacts.Add(
+                        new Contact 
+                        {
+                            ContactId = personId2,
+                            Lastname = lastName,
+                            Firstname = firstname,
+                            Patronymic = patronimic,
+                            Phonenumber = phonenumber
+                        });
+                    count++;
+                });
+
+            return contacts.Count == 0
+                ? null
+                : contacts[0];
+        }
+
         public void AddContact(Contact contact)
         {
             contactsDbTool.Insert(lastname: contact.Lastname, 

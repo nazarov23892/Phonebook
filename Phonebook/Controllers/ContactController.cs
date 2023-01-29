@@ -63,8 +63,7 @@ namespace Phonebook.Controllers
 
         public ViewResult Show(int id)
         {
-            var contact = contactsRepository.Contacts
-                .FirstOrDefault(i => i.ContactId == id);
+            Contact contact = contactsRepository.GetContact(id);
             return View(contact);
         }
 
@@ -91,8 +90,7 @@ namespace Phonebook.Controllers
         [HttpGet]
         public ViewResult Edit(int id)
         {
-            var contact = contactsRepository.Contacts
-                .FirstOrDefault(i => i.ContactId == id);
+            Contact contact = contactsRepository.GetContact(id);
             return View(contact);
         }
 
