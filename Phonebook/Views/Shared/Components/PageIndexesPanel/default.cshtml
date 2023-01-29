@@ -5,20 +5,42 @@
     int pageLast = ViewBag.PageLast;
 }
 
-<div>
-    @for (int i = pageFirst; i <= pageLast; i++)
-    {
-        string btnclass = i == Model.PageNo
-            ? "btn btn-sm btn-primary"
-            : "btn btn-sm btn-default";
-        <a asp-controller="Contact"
-           asp-action="List"
-           asp-route-page="@i"
-           asp-route-fname="@Model.FilterName"
-           asp-route-fphone="@Model.FilterPhonenumber"
-           asp-route-fsort="@Model.SortOption"
-           class="@btnclass"
-           >@i</a>
-        @:&nbsp;
-    }
-</div>
+
+    @*<nav aria-label="...">*@
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-controller="Contact"
+               asp-action="List"
+               asp-route-page="1"
+               asp-route-fname="@Model.FilterName"
+               asp-route-fphone="@Model.FilterPhonenumber"
+               asp-route-fsort="@Model.SortOption"
+               class="page-link">Первая</a>
+        </li>
+        @for (int i = pageFirst; i <= pageLast; i++)
+        {
+            string btnclass = i == Model.PageNo
+            ? "page-item active"
+            : "page-item";
+
+            <li class="@btnclass">
+                <a asp-controller="Contact"
+                   asp-action="List"
+                   asp-route-page="@i"
+                   asp-route-fname="@Model.FilterName"
+                   asp-route-fphone="@Model.FilterPhonenumber"
+                   asp-route-fsort="@Model.SortOption"
+                   class="@btnclass">@(i)</a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-controller="Contact"
+               asp-action="List"
+               asp-route-page="@Model.PageCount"
+               asp-route-fname="@Model.FilterName"
+               asp-route-fphone="@Model.FilterPhonenumber"
+               asp-route-fsort="@Model.SortOption"
+               class="page-link">Последняя</a>
+        </li>
+    </ul>
+    @*</nav>*@
