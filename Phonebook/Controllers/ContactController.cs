@@ -77,11 +77,11 @@ namespace Phonebook.Controllers
         [HttpPost]
         public IActionResult Create(Contact contact)
         {
+            ValidateContact(contact, ModelState);
             if (!ModelState.IsValid)
             {
                 return View(contact);
             }
-
             contactsRepository.AddContact(contact);
             return RedirectToAction(
                 actionName: nameof(this.List),
@@ -99,6 +99,7 @@ namespace Phonebook.Controllers
         [HttpPost]
         public IActionResult Edit(Contact contact)
         {
+            ValidateContact(contact, ModelState);
             if (!ModelState.IsValid)
             {
                 return View(contact);
@@ -117,6 +118,15 @@ namespace Phonebook.Controllers
             return RedirectToAction(
                 actionName: nameof(this.List),
                 controllerName: "Contact");
+        }
+
+        private static void ValidateContact(Contact contact, Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary modelState)
+        {
+            if (String.IsNullOrEmpty(contact.Lastname)
+                && String.IsNullOrEmpty(contact.Firstname))
+            {
+                modelState.AddModelError("", "firstname or lastname must be non-empty");
+            }
         }
     }
 }
