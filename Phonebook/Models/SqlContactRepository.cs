@@ -105,10 +105,10 @@ namespace Phonebook.Models
         public void AddContact(Contact contact)
         {
             var parameters = new[] {
-                new SqlParameter { ParameterName = "@lastname", Value = contact.Lastname },
-                new SqlParameter { ParameterName = "@firstname", Value = contact.Firstname },
-                new SqlParameter { ParameterName = "@patronymic", Value = contact.Patronymic },
-                new SqlParameter { ParameterName = "@phonenumber", Value = contact.Phonenumber }
+                new SqlParameter { ParameterName = "@lastname", Value = (object)contact.Lastname ?? DBNull.Value},
+                new SqlParameter { ParameterName = "@firstname", Value = (object)contact.Firstname ?? DBNull.Value},
+                new SqlParameter { ParameterName = "@patronymic", Value = (object)contact.Patronymic ?? DBNull.Value },
+                new SqlParameter { ParameterName = "@phonenumber", Value = (object)contact.Phonenumber ?? DBNull.Value }
             };
             var result = ExecuteSqlCommand(
                 sqlCommand: insertCommandString,
@@ -133,10 +133,10 @@ namespace Phonebook.Models
         {
             var parameters = new[] {
                 new SqlParameter { ParameterName = "@contactId", Value = contact.ContactId },
-                new SqlParameter { ParameterName = "@lastname", Value = contact.Lastname },
-                new SqlParameter { ParameterName = "@firstname", Value = contact.Firstname },
-                new SqlParameter { ParameterName = "@patronymic", Value = contact.Patronymic },
-                new SqlParameter { ParameterName = "@phonenumber", Value = contact.Phonenumber }
+                new SqlParameter { ParameterName = "@lastname", Value = (object)contact.Lastname ?? DBNull.Value},
+                new SqlParameter { ParameterName = "@firstname", Value = (object)contact.Firstname ?? DBNull.Value},
+                new SqlParameter { ParameterName = "@patronymic", Value = (object)contact.Patronymic ?? DBNull.Value },
+                new SqlParameter { ParameterName = "@phonenumber", Value = (object)contact.Phonenumber ?? DBNull.Value }
             };
             var result = ExecuteSqlCommand(
                 sqlCommand: updateCommandString,
