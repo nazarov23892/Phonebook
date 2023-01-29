@@ -45,10 +45,16 @@
                 </tr>
             }
         </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-2">
         <a asp-controller="Contact"
            asp-action="Create"
            class="btn btn-primary btn-sm">add new</a>
-
-        @(await Component.InvokeAsync("PageIndexesPanel"))
+    </div>
+    <div class="col-sm-4">
+        @(await Component.InvokeAsync("PageIndexesPanel", Model))
     </div>
 </div>

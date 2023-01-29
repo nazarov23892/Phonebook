@@ -12,7 +12,7 @@ namespace Phonebook.Controllers
     {
         private IContactRepository contactsRepository;
 
-        public int PageSize { get; private set; } = 12;
+        public int PageSize { get; private set; } = 10;
 
         public ContactController(IContactRepository repository)
         {

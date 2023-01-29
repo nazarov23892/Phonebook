@@ -1,15 +1,23 @@
 ﻿@model ContactListViewModel
 
+@{
+    int pageFirst = ViewBag.PageFirst;
+    int pageLast = ViewBag.PageLast;
+}
+
 <div>
-    @for (int i = 1; i <= Model.PageCount; i++)
+    @for (int i = pageFirst; i <= pageLast; i++)
     {
+        string btnclass = i == Model.PageNo
+            ? "btn btn-sm btn-primary"
+            : "btn btn-sm btn-default";
         <a asp-controller="Contact"
            asp-action="List"
            asp-route-page="@i"
            asp-route-fname="@Model.FilterName"
            asp-route-fphone="@Model.FilterPhonenumber"
            asp-route-fsort="@Model.SortOption"
-           class="btn btn-default btn-sm"
+           class="@btnclass"
            >@i</a>
         @:&nbsp;
     }
