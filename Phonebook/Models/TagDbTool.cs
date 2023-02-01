@@ -7,10 +7,8 @@ using System.Data.SqlClient;
 
 namespace Phonebook.Models
 {
-    public class TagDbTool
+    public class TagDbTool: DbTool
     {
-        private const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
         private const string selectString =
             @"select
             t.Tag
@@ -28,7 +26,7 @@ namespace Phonebook.Models
 
         public void Select(Action<IDataRecord> itemRowReadedFunc)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString: ConnectionString))
             {
                 using (SqlCommand sqlCommand = new SqlCommand(cmdText: selectString, connection: sqlConnection))
                 {
@@ -79,32 +77,5 @@ namespace Phonebook.Models
                 : 0;
         }
 
-        private object ExecuteSqlCommand(string sqlCommand, IEnumerable<SqlParameter> sqlParameters, CommandExecuteMode sqlExecuteMode)
-        {
-            object result;
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
-            {
-                sqlConnection.Open();
-                using (SqlCommand command = new SqlCommand(
-                    cmdText: sqlCommand,
-                    connection: sqlConnection))
-                {
-                    foreach (var param in sqlParameters ?? Enumerable.Empty<SqlParameter>())
-                    {
-                        command.Parameters.Add(param);
-                    }
-                    result = sqlExecuteMode == CommandExecuteMode.Scalar
-                        ? command.ExecuteScalar()
-                        : command.ExecuteNonQuery();
-                }
-                sqlConnection.Close();
-            }
-            return result;
-        }
-
-        private enum CommandExecuteMode
-        {
-            Scalar, NonQuery
-        }
     }
 }

@@ -7,7 +7,10 @@ namespace Phonebook.Models
 {
     public class SqlContactRepository : IContactRepository
     {
-        private ContactDbTool contactsDbTool = new ContactDbTool();
+        private ContactDbTool contactsDbTool = new ContactDbTool 
+        {
+            ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+        };
 
         public IEnumerable<Contact> Contacts
         {

@@ -7,7 +7,10 @@ namespace Phonebook.Models
 {
     public class SqlTagRepository : ITagRepository
     {
-        private TagDbTool tagsDbTool = new TagDbTool();
+        private TagDbTool tagsDbTool = new TagDbTool
+        {
+            ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+        };
 
         public IEnumerable<string> Tags
         {

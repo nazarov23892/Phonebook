@@ -7,10 +7,8 @@ using System.Data.SqlClient;
 
 namespace Phonebook.Models
 {
-    public class ContactDbTool
+    public class ContactDbTool: DbTool
     {
-        private const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
         private const string selectString =
             @"select 
                 c.ContactId, 
@@ -118,7 +116,7 @@ namespace Phonebook.Models
 
         public void SelectById(int contactId, Action<IDataRecord> itemRowReadedFunc)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString: ConnectionString))
             {
                 using (SqlCommand sqlCommand = new SqlCommand(
                     cmdText: selectByIdString,
@@ -145,7 +143,7 @@ namespace Phonebook.Models
 
         public void Select(string filterName, string filterPhone, string sortColumn, OrderDirection orderDirection, Action<IDataRecord> itemRowReadedFunc)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString: ConnectionString))
             {
                 string sqlText = String.IsNullOrEmpty(sortColumn)
                 ? selectString
@@ -176,39 +174,12 @@ namespace Phonebook.Models
             return;
         }
 
-        private object ExecuteSqlCommand(string sqlCommand, IEnumerable<SqlParameter> sqlParameters, CommandExecuteMode sqlExecuteMode)
-        {
-            object result;
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
-            {
-                sqlConnection.Open();
-                using (SqlCommand command = new SqlCommand(
-                    cmdText: sqlCommand,
-                    connection: sqlConnection))
-                {
-                    foreach (var param in sqlParameters ?? Enumerable.Empty<SqlParameter>())
-                    {
-                        command.Parameters.Add(param);
-                    }
-                    result = sqlExecuteMode == CommandExecuteMode.Scalar
-                        ? command.ExecuteScalar()
-                        : command.ExecuteNonQuery();
-                }
-                sqlConnection.Close();
-            }
-            return result;
-        }
-
         private string GetSqlOrderSection(string columnName, OrderDirection orderDirection)
         {
             string sort = orderDirection == OrderDirection.Descending ? "desc" : "asc";
             return $"order by c.{columnName} {sort}";
         }
 
-        private enum CommandExecuteMode
-        {
-            Scalar, NonQuery
-        }
     }
 
     public enum OrderDirection
