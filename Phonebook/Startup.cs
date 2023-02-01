@@ -17,7 +17,8 @@ namespace Phonebook
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IContactRepository, SqlContactRepository>();
+            services.AddSingleton<IContactRepository, SqlContactRepository>();
+            services.AddSingleton<ITagRepository, SqlTagRepository>();
             services.AddMvc()
                 .AddMvcOptions(o => o.EnableEndpointRouting = false);
         }

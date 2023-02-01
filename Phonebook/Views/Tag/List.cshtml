@@ -1,0 +1,51 @@
+﻿@model IEnumerable<string>
+@{
+
+}
+
+<div class="col-sm-1"></div>
+<div class="col col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Tags edit form</h4>
+        </div>
+    </div>
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th>tag</th>
+            <th>actions</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item
+                </td>
+                <td>
+                    <form method="post" 
+                          asp-controller="Tag"
+                          asp-action="Delete">
+                        <input name="Tag" value="@item" hidden />
+                        <button type="submit"
+                                class="btn btn-danger btn-sm"
+                                >delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+    <form method="post"
+          asp-controller="Tag"
+          asp-action="Create">
+        <input name="Tag" />
+        <button type="submit"
+                class="btn btn-primary btn-sm"
+                >add new</button>
+    </form>
+    <p></p>
+    <p>
+        <a asp-controller="Contact"
+           asp-action="List"
+           class="btn btn-default">back to contacts</a>
+    </p>
+</div>
