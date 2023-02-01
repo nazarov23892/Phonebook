@@ -21,5 +21,19 @@ namespace Phonebook.Controllers
             return View(tagRepository.Tags);
         }
 
+        [HttpPost]
+        public IActionResult Create(string Tag)
+        {
+            if (CheckValidTag(Tag))
+            {
+                tagRepository.AddTag(Tag);
+            }
+            return RedirectToAction(actionName: nameof(this.List), controllerName: "Tag");
+        }
+
+        private static bool CheckValidTag(string Tag)
+        {
+            return !String.IsNullOrEmpty(Tag);
+        }
     }
 }

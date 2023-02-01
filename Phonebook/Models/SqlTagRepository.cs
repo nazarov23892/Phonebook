@@ -16,7 +16,7 @@ namespace Phonebook.Models
 
         public void AddTag(string tag)
         {
-            throw new NotImplementedException();
+            tagsDbTool.Insert(tag);
         }
 
         public void DeleteTag(string tag)

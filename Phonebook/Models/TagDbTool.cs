@@ -17,6 +17,12 @@ namespace Phonebook.Models
             from
             Tags t";
 
+        private const string insertCommandString =
+            @"insert 
+            into Tags (Tag)
+            select @tag 
+            where not exists (select t.Tag from Tags t where t.Tag = @tag)";
+
         public void Select(Action<IDataRecord> itemRowReadedFunc)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
@@ -40,5 +46,47 @@ namespace Phonebook.Models
             return;
         }
 
+        public int Insert(string tag)
+        {
+            var parameters = new[] {
+                new SqlParameter { ParameterName = "@tag", Value = (object)tag ?? DBNull.Value},
+            };
+            var result = ExecuteSqlCommand(
+                sqlCommand: insertCommandString,
+                sqlParameters: parameters,
+                sqlExecuteMode: CommandExecuteMode.Scalar) as decimal?;
+
+            return result.HasValue
+                ? Convert.ToInt32(result.Value)
+                : -1;
+        }
+
+        private object ExecuteSqlCommand(string sqlCommand, IEnumerable<SqlParameter> sqlParameters, CommandExecuteMode sqlExecuteMode)
+        {
+            object result;
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
+            {
+                sqlConnection.Open();
+                using (SqlCommand command = new SqlCommand(
+                    cmdText: sqlCommand,
+                    connection: sqlConnection))
+                {
+                    foreach (var param in sqlParameters ?? Enumerable.Empty<SqlParameter>())
+                    {
+                        command.Parameters.Add(param);
+                    }
+                    result = sqlExecuteMode == CommandExecuteMode.Scalar
+                        ? command.ExecuteScalar()
+                        : command.ExecuteNonQuery();
+                }
+                sqlConnection.Close();
+            }
+            return result;
+        }
+
+        private enum CommandExecuteMode
+        {
+            Scalar, NonQuery
+        }
     }
 }
