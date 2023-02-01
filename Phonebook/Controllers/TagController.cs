@@ -31,7 +31,14 @@ namespace Phonebook.Controllers
             return RedirectToAction(actionName: nameof(this.List), controllerName: "Tag");
         }
 
-        private static bool CheckValidTag(string Tag)
+        [HttpPost]
+        public IActionResult Delete(string tag)
+        {
+            tagRepository.DeleteTag(tag);
+            return RedirectToAction(actionName: nameof(this.List), controllerName: "Tag");
+        }
+
+        private bool CheckValidTag(string Tag)
         {
             return !String.IsNullOrEmpty(Tag);
         }

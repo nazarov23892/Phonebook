@@ -23,6 +23,9 @@ namespace Phonebook.Models
             select @tag 
             where not exists (select t.Tag from Tags t where t.Tag = @tag)";
 
+        private const string deleteCommandString =
+            @"delete t from Tags t where t.Tag = @tag";
+
         public void Select(Action<IDataRecord> itemRowReadedFunc)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectionString: connectionString))
@@ -59,6 +62,21 @@ namespace Phonebook.Models
             return result.HasValue
                 ? Convert.ToInt32(result.Value)
                 : -1;
+        }
+
+        public int Delete(string tag)
+        {
+            var parameters = new[] {
+                new SqlParameter { ParameterName = "@tag", Value = tag }
+            };
+            var result = ExecuteSqlCommand(
+                sqlCommand: deleteCommandString,
+                sqlParameters: parameters,
+                sqlExecuteMode: CommandExecuteMode.NonQuery) as int?;
+
+            return result.HasValue
+                ? result.Value
+                : 0;
         }
 
         private object ExecuteSqlCommand(string sqlCommand, IEnumerable<SqlParameter> sqlParameters, CommandExecuteMode sqlExecuteMode)

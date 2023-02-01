@@ -21,7 +21,7 @@ namespace Phonebook.Models
 
         public void DeleteTag(string tag)
         {
-            throw new NotImplementedException();
+            tagsDbTool.Delete(tag);
         }
 
         private IEnumerable<string> GetTags()
