@@ -7,14 +7,11 @@ namespace Phonebook.Models
 {
     public class SqlTagRepository : ITagRepository
     {
-        private List<string> tags = new List<string>
-        {
-            "tag#1", "tag#2", "tag#3"
-        };
+        private TagDbTool tagsDbTool = new TagDbTool();
 
-        public IEnumerable<string> Tags 
-        { 
-            get => tags; 
+        public IEnumerable<string> Tags
+        {
+            get => GetTags();
         }
 
         public void AddTag(string tag)
@@ -27,5 +24,18 @@ namespace Phonebook.Models
             throw new NotImplementedException();
         }
 
+        private IEnumerable<string> GetTags()
+        {
+            List<string> tags = new List<string>();
+            tagsDbTool.Select(itemRow =>
+            {
+                string tag = itemRow["Tag"] as string;
+                if (!String.IsNullOrEmpty(tag))
+                {
+                    tags.Add(tag);
+                }
+            });
+            return tags;
+        }
     }
 }
