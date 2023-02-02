@@ -15,6 +15,15 @@ namespace Phonebook.Models
             from
             Tags t";
 
+        private const string selectByContactString =
+            @"select
+            t.Tag
+            from
+            ContactsTags ct
+            inner join Tags t on t.TagId = ct.TagId
+            where
+            ct.ContactId = @id";
+
         private const string insertCommandString =
             @"insert 
             into Tags (Tag)
@@ -30,6 +39,33 @@ namespace Phonebook.Models
             {
                 using (SqlCommand sqlCommand = new SqlCommand(cmdText: selectString, connection: sqlConnection))
                 {
+                    sqlConnection.Open();
+                    using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
+                    {
+                        if (sqlReader != null && sqlReader.HasRows)
+                        {
+                            while (sqlReader.Read())
+                            {
+                                itemRowReadedFunc(sqlReader);
+                            }
+                        }
+                    }
+                    sqlConnection.Close();
+                }
+            }
+            return;
+        }
+
+        public void SelectByContact(int contactId, Action<IDataRecord> itemRowReadedFunc)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString: ConnectionString))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand(
+                    cmdText: selectByContactString, 
+                    connection: sqlConnection))
+                {
+                    SqlParameter parameter = new SqlParameter { ParameterName = "@id", Value = contactId };
+                    sqlCommand.Parameters.Add(parameter);
                     sqlConnection.Open();
                     using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
                     {

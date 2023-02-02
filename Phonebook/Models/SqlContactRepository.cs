@@ -7,10 +7,10 @@ namespace Phonebook.Models
 {
     public class SqlContactRepository : IContactRepository
     {
-        private ContactDbTool contactsDbTool = new ContactDbTool 
-        {
-            ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-        };
+        private const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+        private ContactDbTool contactsDbTool = new ContactDbTool { ConnectionString = connectionString };
+        private TagDbTool tagsDbTool = new TagDbTool { ConnectionString = connectionString };
 
         public IEnumerable<Contact> Contacts
         {
@@ -83,10 +83,34 @@ namespace Phonebook.Models
                         });
                     count++;
                 });
-
-            return contacts.Count == 0
+            Contact contact = contacts.Count == 0
                 ? null
                 : contacts[0];
+            
+            if (contact != null)
+            {
+                contact.Tags = GetTags(contactId);
+            }
+            return contact;
+        }
+
+        public IEnumerable<string> GetTags(int contactId)
+        {
+            int count = 0;
+            List<string> tags = new List<string>();
+            tagsDbTool.SelectByContact(
+                contactId: contactId,
+                itemRowReadedFunc: row =>
+                {
+                    string tag = row["Tag"] as string;
+                    if (String.IsNullOrEmpty(tag))
+                    {
+                        return;
+                    }
+                    tags.Add(tag);
+                    count++;
+                });
+            return tags;
         }
 
         public void AddContact(Contact contact)

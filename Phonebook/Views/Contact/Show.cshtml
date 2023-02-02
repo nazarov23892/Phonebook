@@ -1,5 +1,15 @@
-﻿
+﻿@using System.Text
 @model Contact
+
+@{
+    StringBuilder tagsStringBuilder = new StringBuilder();
+    int i = 0;
+    foreach (var tag in Model.Tags ?? Enumerable.Empty<string>())
+    {
+        tagsStringBuilder.Append(i > 0 ? $"; {tag}" : tag);
+        i++;
+    }
+}
 
 <div class="col-sm-1"></div>
 <div class="col col-sm-6">
@@ -23,6 +33,10 @@
     <div class="form-group">
         <label asp-for="Phonenumber"></label>
         <input asp-for="Phonenumber" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label>Tags</label>
+        <input value="@tagsStringBuilder.ToString().ToString()" class="form-control" disabled />
     </div>
     <a asp-controller="Contact"
        asp-action="List"

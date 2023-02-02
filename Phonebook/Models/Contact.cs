@@ -26,5 +26,6 @@ namespace Phonebook.Models
             ErrorMessage = "phonenumber should have only digits")]
         public string Phonenumber { get; set; }
 
+        public IEnumerable<string> Tags { get; set; }
     }
 }
