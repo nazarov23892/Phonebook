@@ -41,11 +41,11 @@
                     <label>@tag</label>
                     @if (contactTags.Contains(tag))
                     {
-                        <input type="checkbox" checked />
+                        <input type="checkbox" name="TagsToAssign" value="@tag" checked />
                     }
                     else
                     {
-                        <input type="checkbox" />
+                        <input type="checkbox" name="TagsToAssign" value="@tag"/>
                     }
                     @:&nbsp;
                 }

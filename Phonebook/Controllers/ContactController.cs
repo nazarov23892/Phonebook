@@ -110,6 +110,7 @@ namespace Phonebook.Controllers
             {
                 return View(contact);
             }
+            contact.Tags = contactViewModel.TagsToAssign;
             contactsRepository.SaveContact(contact);
 
             return RedirectToAction(

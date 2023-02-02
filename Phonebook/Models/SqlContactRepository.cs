@@ -11,6 +11,7 @@ namespace Phonebook.Models
 
         private ContactDbTool contactsDbTool = new ContactDbTool { ConnectionString = connectionString };
         private TagDbTool tagsDbTool = new TagDbTool { ConnectionString = connectionString };
+        private ContactsTagsDbTool contactsTagsDbTool = new ContactsTagsDbTool { ConnectionString = connectionString };
 
         public IEnumerable<Contact> Contacts
         {
@@ -135,6 +136,12 @@ namespace Phonebook.Models
                 firstname: contact.Firstname, 
                 patronymic: contact.Patronymic, 
                 phonenumber: contact.Phonenumber);
+
+            contactsTagsDbTool.DeleteByContact(contactId: contact.ContactId);
+            foreach (string tag in contact.Tags ?? Enumerable.Empty<string>())
+            {
+                contactsTagsDbTool.Insert(contactId: contact.ContactId, tag: tag);
+            }
             return;
         }
     }
