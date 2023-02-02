@@ -11,12 +11,14 @@ namespace Phonebook.Controllers
     public class ContactController : Controller
     {
         private IContactRepository contactsRepository;
+        private ITagRepository tagsRepository;
 
         public int PageSize { get; private set; } = 10;
 
-        public ContactController(IContactRepository repository)
+        public ContactController(IContactRepository contactsRepo, ITagRepository tagsRepo)
         {
-            contactsRepository = repository;
+            contactsRepository = contactsRepo;
+            tagsRepository = tagsRepo;
         }
 
         public IActionResult List(int page = 1, string fname = null, string fphone = null,
@@ -91,12 +93,18 @@ namespace Phonebook.Controllers
         public ViewResult Edit(int id)
         {
             Contact contact = contactsRepository.GetContact(id);
-            return View(contact);
+            ContactViewModel contactViewModel = new ContactViewModel
+            {
+                Contact = contact,
+                TagList = tagsRepository.Tags
+            };
+            return View(contactViewModel);
         }
 
         [HttpPost]
-        public IActionResult Edit(Contact contact)
+        public IActionResult Edit(ContactModifyViewModel contactViewModel)
         {
+            Contact contact = contactViewModel.Contact;
             ValidateContact(contact, ModelState);
             if (!ModelState.IsValid)
             {

@@ -1,5 +1,9 @@
 ﻿
-@model Contact
+@model ContactViewModel
+
+@{ 
+    IEnumerable<string> contactTags = Model.Contact.Tags ?? Enumerable.Empty<string>();
+}
 
 <div class="col-sm-1"></div>
 <div class="col col-sm-6">
@@ -12,22 +16,40 @@
           asp-controller="Contact"
           asp-action="Edit">
         <div asp-validation-summary="All" class="text-danger"></div>
-        <input asp-for="ContactId" hidden />
+        <input asp-for="Contact.ContactId" hidden />
         <div class="form-group">
-            <label asp-for="Lastname"></label>
-            <input asp-for="Lastname" class="form-control" />
+            <label asp-for="Contact.Lastname"></label>
+            <input asp-for="Contact.Lastname" class="form-control" />
         </div>
         <div class="form-group">
-            <label asp-for="Firstname"></label>
-            <input asp-for="Firstname" class="form-control" />
+            <label asp-for="Contact.Firstname"></label>
+            <input asp-for="Contact.Firstname" class="form-control" />
         </div>
         <div class="form-group">
-            <label asp-for="Patronymic"></label>
-            <input asp-for="Patronymic" class="form-control" />
+            <label asp-for="Contact.Patronymic"></label>
+            <input asp-for="Contact.Patronymic" class="form-control" />
         </div>
         <div class="form-group">
-            <label asp-for="Phonenumber"></label>
-            <input asp-for="Phonenumber" class="form-control" />
+            <label asp-for="Contact.Phonenumber"></label>
+            <input asp-for="Contact.Phonenumber" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Tags</label>
+            <div>
+                @foreach (var tag in Model.TagList)
+                {
+                    <label>@tag</label>
+                    @if (contactTags.Contains(tag))
+                    {
+                        <input type="checkbox" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" />
+                    }
+                    @:&nbsp;
+                }
+            </div>
         </div>
         <button type="submit"
                 class="btn btn-primary">
