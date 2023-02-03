@@ -131,8 +131,7 @@ namespace Phonebook.Models
         public void DeleteContact(int contactId)
         {
             contactsDbTool.Delete(contactId);
-
-            // todo: to delete related from ContactsTags
+            contactsTagsDbTool.DeleteByContact(contactId);
             return;
         }
 
