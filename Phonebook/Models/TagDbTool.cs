@@ -35,51 +35,23 @@ namespace Phonebook.Models
 
         public void Select(Action<IDataRecord> itemRowReadedFunc)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: ConnectionString))
-            {
-                using (SqlCommand sqlCommand = new SqlCommand(cmdText: selectString, connection: sqlConnection))
-                {
-                    sqlConnection.Open();
-                    using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
-                    {
-                        if (sqlReader != null && sqlReader.HasRows)
-                        {
-                            while (sqlReader.Read())
-                            {
-                                itemRowReadedFunc(sqlReader);
-                            }
-                        }
-                    }
-                    sqlConnection.Close();
-                }
-            }
+            ExecuteSelect(sqlSelectCommand: selectString,
+                itemRowReadedProc: itemRowReadedFunc,
+                sqlParameters: null);
+
             return;
         }
 
         public void SelectByContact(int contactId, Action<IDataRecord> itemRowReadedFunc)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: ConnectionString))
+            SqlParameter[] parameters = new[]
             {
-                using (SqlCommand sqlCommand = new SqlCommand(
-                    cmdText: selectByContactString, 
-                    connection: sqlConnection))
-                {
-                    SqlParameter parameter = new SqlParameter { ParameterName = "@id", Value = contactId };
-                    sqlCommand.Parameters.Add(parameter);
-                    sqlConnection.Open();
-                    using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
-                    {
-                        if (sqlReader != null && sqlReader.HasRows)
-                        {
-                            while (sqlReader.Read())
-                            {
-                                itemRowReadedFunc(sqlReader);
-                            }
-                        }
-                    }
-                    sqlConnection.Close();
-                }
-            }
+                new SqlParameter { ParameterName = "@id", Value = contactId }
+            };
+            ExecuteSelect(sqlSelectCommand: selectByContactString,
+                itemRowReadedProc: itemRowReadedFunc,
+                sqlParameters: parameters);
+
             return;
         }
 
