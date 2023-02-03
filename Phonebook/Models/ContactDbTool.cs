@@ -18,6 +18,8 @@ namespace Phonebook.Models
                 c.Phonenumber
             from
                 Contacts c
+                left outer join ContactsTags ct on (ct.ContactId = c.ContactId and @tag is not null)
+                left outer join Tags t on (t.TagId = ct.TagId)
             where
                 c.Phonenumber like(@phonenumber)
                 and 
@@ -25,7 +27,8 @@ namespace Phonebook.Models
                 c.Firstname like(@name) 
                 or c.Lastname like(@name) 
                 or c.Patronymic like(@name)
-                ) ";
+                )
+                and (@tag is null or t.Tag = @tag)";
 
         private const string selectByIdString =
             @"select 
@@ -127,16 +130,21 @@ namespace Phonebook.Models
             return;
         }
 
-        public void Select(string filterName, string filterPhone, string sortColumn, OrderDirection orderDirection, Action<IDataRecord> itemRowReadedFunc)
+        public void Select(string filterName, string filterPhone, string filterTag, string sortColumn, OrderDirection orderDirection, Action<IDataRecord> itemRowReadedFunc)
         {
             string selectCommand = String.IsNullOrEmpty(sortColumn)
                ? selectString
                : selectString + GetSqlOrderSection(sortColumn, orderDirection);
 
+            object tagValue = !String.IsNullOrEmpty(filterTag)
+                ? filterTag
+                : DBNull.Value as object;
+
             SqlParameter[] parameters = new[]
             {
                 new SqlParameter { ParameterName = "@phonenumber", Value = $"%{filterPhone}%" },
-                new SqlParameter { ParameterName = "@name", Value = $"%{filterName}%" }
+                new SqlParameter { ParameterName = "@name", Value = $"%{filterName}%" },
+                new SqlParameter { ParameterName = "@tag", Value = tagValue }
             };
             ExecuteSelect(sqlSelectCommand: selectCommand,
                 itemRowReadedProc: itemRowReadedFunc,

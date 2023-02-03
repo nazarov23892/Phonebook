@@ -35,6 +35,7 @@ namespace Phonebook.Models
             contactsDbTool.Select(
                 filterName: FilterName,
                 filterPhone: FilterPhone,
+                filterTag: null,
                 sortColumn: SortColumn,
                 orderDirection: orderDirection,
                 itemRowReadedFunc: row =>
