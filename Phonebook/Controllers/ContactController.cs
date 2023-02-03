@@ -72,17 +72,24 @@ namespace Phonebook.Controllers
         [HttpGet]
         public ViewResult Create()
         {
-            return View();
+            ContactViewModel contactViewModel = new ContactViewModel
+            {
+                Contact = null,
+                TagList = tagsRepository.Tags
+            };
+            return View(contactViewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(Contact contact)
+        public IActionResult Create(ContactModifyViewModel contactModel)
         {
+            Contact contact = contactModel.Contact;
             ValidateContact(contact, ModelState);
             if (!ModelState.IsValid)
             {
                 return View(contact);
             }
+            contact.Tags = contactModel.TagsToAssign;
             contactsRepository.AddContact(contact);
             return RedirectToAction(
                 actionName: nameof(this.List),

@@ -116,16 +116,23 @@ namespace Phonebook.Models
 
         public void AddContact(Contact contact)
         {
-            contactsDbTool.Insert(lastname: contact.Lastname, 
+            int insertedId = contactsDbTool.Insert(lastname: contact.Lastname, 
                 firstname: contact.Firstname, 
                 patronymic: contact.Patronymic, 
                 phonenumber: contact.Phonenumber);
+
+            foreach (string tag in contact.Tags ?? Enumerable.Empty<string>())
+            {
+                contactsTagsDbTool.Insert(contactId: insertedId, tag: tag);
+            }
             return;
         }
 
         public void DeleteContact(int contactId)
         {
             contactsDbTool.Delete(contactId);
+
+            // todo: to delete related from ContactsTags
             return;
         }
 

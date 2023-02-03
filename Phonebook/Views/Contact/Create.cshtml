@@ -1,5 +1,5 @@
 ﻿
-@model Contact
+@model ContactViewModel
 
 <div class="col-sm-1"></div>
 <div class="col col-sm-6">
@@ -8,25 +8,36 @@
             <h4>Creation form</h4>
         </div>
     </div>
-    <form method="post" 
+    <form method="post"
           asp-controller="Contact"
           asp-action="Create">
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Lastname"></label>
-            <input asp-for="Lastname" class="form-control" />
+            <label asp-for="Contact.Lastname"></label>
+            <input asp-for="Contact.Lastname" class="form-control" />
         </div>
         <div class="form-group">
-            <label asp-for="Firstname"></label>
-            <input asp-for="Firstname" class="form-control" />
+            <label asp-for="Contact.Firstname"></label>
+            <input asp-for="Contact.Firstname" class="form-control" />
         </div>
         <div class="form-group">
-            <label asp-for="Patronymic"></label>
-            <input asp-for="Patronymic" class="form-control" />
+            <label asp-for="Contact.Patronymic"></label>
+            <input asp-for="Contact.Patronymic" class="form-control" />
         </div>
         <div class="form-group">
-            <label asp-for="Phonenumber"></label>
-            <input asp-for="Phonenumber" class="form-control" />
+            <label asp-for="Contact.Phonenumber"></label>
+            <input asp-for="Contact.Phonenumber" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Tags</label>
+            <div>
+                @foreach (var tag in Model.TagList)
+                {
+                    <label>@tag</label>
+                    <input type="checkbox" name="TagsToAssign" value="@tag" />
+                    @:&nbsp;
+                }
+            </div>
         </div>
         <button type="submit"
                 class="btn btn-primary">
