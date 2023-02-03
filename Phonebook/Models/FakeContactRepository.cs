@@ -20,6 +20,7 @@ namespace Phonebook.Models
         public string FilterPhone { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public string SortColumn { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public SortDirection SortDirection { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string FilterTag { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public FakeContactRepository()
         {

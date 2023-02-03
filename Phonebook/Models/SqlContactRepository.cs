@@ -21,6 +21,7 @@ namespace Phonebook.Models
         public string FilterName { get; set; }
         public string FilterPhone { get; set; }
         public string SortColumn { get; set ; }
+        public string FilterTag { get; set; }
         public SortDirection SortDirection { get; set; }
 
         private IEnumerable<Contact> GetContacts()
@@ -35,7 +36,7 @@ namespace Phonebook.Models
             contactsDbTool.Select(
                 filterName: FilterName,
                 filterPhone: FilterPhone,
-                filterTag: null,
+                filterTag: FilterTag,
                 sortColumn: SortColumn,
                 orderDirection: orderDirection,
                 itemRowReadedFunc: row =>

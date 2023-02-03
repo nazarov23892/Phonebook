@@ -10,6 +10,7 @@ namespace Phonebook.Models
         public IEnumerable<Contact> Contacts { get; }
         public string FilterName { get; set; }
         public string FilterPhone { get; set; }
+        public string FilterTag { get; set; }
         public string SortColumn { get; set; }
         public SortDirection SortDirection { get; set; }
 
