@@ -116,61 +116,32 @@ namespace Phonebook.Models
 
         public void SelectById(int contactId, Action<IDataRecord> itemRowReadedFunc)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: ConnectionString))
+            SqlParameter[] parameters = new[]
             {
-                using (SqlCommand sqlCommand = new SqlCommand(
-                    cmdText: selectByIdString,
-                    connection: sqlConnection))
-                {
-                    sqlConnection.Open();
-                    sqlCommand.Parameters.Add(new SqlParameter { ParameterName = "@contactId", Value = contactId });
+                new SqlParameter { ParameterName = "@contactId", Value = contactId }
+            };
+            ExecuteSelect(sqlSelectCommand: selectByIdString,
+                itemRowReadedProc: itemRowReadedFunc,
+                sqlParameters: parameters);
 
-                    using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
-                    {
-                        if (sqlReader != null && sqlReader.HasRows)
-                        {
-                            while (sqlReader.Read())
-                            {
-                                itemRowReadedFunc(sqlReader);
-                            }
-                        }
-                    }
-                    sqlConnection.Close();
-                }
-            }
             return;
         }
 
         public void Select(string filterName, string filterPhone, string sortColumn, OrderDirection orderDirection, Action<IDataRecord> itemRowReadedFunc)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString: ConnectionString))
+            string selectCommand = String.IsNullOrEmpty(sortColumn)
+               ? selectString
+               : selectString + GetSqlOrderSection(sortColumn, orderDirection);
+
+            SqlParameter[] parameters = new[]
             {
-                string sqlText = String.IsNullOrEmpty(sortColumn)
-                ? selectString
-                : selectString + GetSqlOrderSection(sortColumn, orderDirection);
+                new SqlParameter { ParameterName = "@phonenumber", Value = $"%{filterPhone}%" },
+                new SqlParameter { ParameterName = "@name", Value = $"%{filterName}%" }
+            };
+            ExecuteSelect(sqlSelectCommand: selectCommand,
+                itemRowReadedProc: itemRowReadedFunc,
+                sqlParameters: parameters);
 
-                using (SqlCommand sqlCommand = new SqlCommand(cmdText: sqlText, connection: sqlConnection))
-                {
-                    sqlConnection.Open();
-
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@phonenumber", Value = $"%{filterPhone}%" });
-                    sqlCommand.Parameters.Add(
-                        new SqlParameter { ParameterName = "@name", Value = $"%{filterName}%" });
-
-                    using (SqlDataReader sqlReader = sqlCommand.ExecuteReader())
-                    {
-                        if (sqlReader != null && sqlReader.HasRows)
-                        {
-                            while (sqlReader.Read())
-                            {
-                                itemRowReadedFunc(sqlReader);
-                            }
-                        }
-                    }
-                    sqlConnection.Close();
-                }
-            }
             return;
         }
 
