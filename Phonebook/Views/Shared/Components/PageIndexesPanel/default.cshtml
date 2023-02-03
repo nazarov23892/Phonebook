@@ -14,6 +14,7 @@
                asp-route-page="1"
                asp-route-fname="@Model.FilterName"
                asp-route-fphone="@Model.FilterPhonenumber"
+               asp-route-ftag="@Model.FilterTag"
                asp-route-fsort="@Model.SortOption"
                class="page-link">Первая</a>
         </li>
@@ -29,6 +30,7 @@
                    asp-route-page="@i"
                    asp-route-fname="@Model.FilterName"
                    asp-route-fphone="@Model.FilterPhonenumber"
+                   asp-route-ftag="@Model.FilterTag"
                    asp-route-fsort="@Model.SortOption"
                    class="@btnclass">@(i)</a>
             </li>
@@ -39,6 +41,7 @@
                asp-route-page="@Model.PageCount"
                asp-route-fname="@Model.FilterName"
                asp-route-fphone="@Model.FilterPhonenumber"
+               asp-route-ftag="@Model.FilterTag"
                asp-route-fsort="@Model.SortOption"
                class="page-link">Последняя</a>
         </li>

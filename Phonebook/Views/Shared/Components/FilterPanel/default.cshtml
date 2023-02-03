@@ -3,6 +3,7 @@
 
 @{ 
     Dictionary<string, string> sortOptionDict = ViewBag.SortOption;
+    IEnumerable<string> tags = ViewBag.TagList;
 }
 
 <form method="get"
@@ -17,6 +18,23 @@
     <div class="form-group">
         <label>phone</label>
         <input name="fphone" value="@Model.FilterPhonenumber" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label>tag</label>
+        <select name="ftag" class="form-control">
+            <option value="">none</option>
+            @foreach (var tag in tags ?? Enumerable.Empty<string>())
+            {
+                if (tag.Equals(Model.FilterTag))
+                {
+                    <option value="@tag" selected>@tag</option>
+                }
+                else
+                {
+                    <option value="@tag">@tag</option>
+                }
+            }
+        </select>
     </div>
     <div class="form-group">
         <label>sort</label>

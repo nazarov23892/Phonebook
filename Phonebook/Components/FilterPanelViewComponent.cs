@@ -11,6 +11,13 @@ namespace Phonebook.Components
 {
     public class FilterPanelViewComponent: ViewComponent
     {
+        private ITagRepository tagRepository;
+
+        public FilterPanelViewComponent(ITagRepository tagRepo)
+        {
+            tagRepository = tagRepo;
+        }
+
         Dictionary<string, string> keyValuePairs = new Dictionary<string, string>
         {
             [""] = "none",
@@ -23,6 +30,7 @@ namespace Phonebook.Components
         public async Task<ViewViewComponentResult> InvokeAsync()
         {
             ViewBag.SortOption = keyValuePairs;
+            ViewBag.TagList = tagRepository.Tags;
             return View();
         }
     }

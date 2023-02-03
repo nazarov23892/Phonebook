@@ -22,7 +22,7 @@ namespace Phonebook.Controllers
         }
 
         public IActionResult List(int page = 1, string fname = null, string fphone = null,
-            string fsort = null)
+            string ftag = null, string fsort = null)
         {
             var sortOption = (Column: "", SortDir: SortDirection.Ascending);
             if (fsort == "lastname-asc")
@@ -49,6 +49,7 @@ namespace Phonebook.Controllers
             contactsRepository.SortDirection = sortOption.SortDir;
             contactsRepository.FilterName = fname;
             contactsRepository.FilterPhone = fphone;
+            contactsRepository.FilterTag = ftag;
 
             IEnumerable<Contact> contacts = contactsRepository.Contacts;
             ContactListViewModel viewModel = new ContactListViewModel
@@ -58,6 +59,7 @@ namespace Phonebook.Controllers
                 PageNo = page,
                 FilterName = fname,
                 FilterPhonenumber = fphone,
+                FilterTag = ftag,
                 SortOption = fsort
             };
             return View(viewModel);
