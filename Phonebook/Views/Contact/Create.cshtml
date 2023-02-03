@@ -33,8 +33,10 @@
             <div>
                 @foreach (var tag in Model.TagList)
                 {
-                    <label>@tag</label>
-                    <input type="checkbox" name="TagsToAssign" value="@tag" />
+                    <span class="badge badge-pill badge-success">
+                        <label>@tag</label>
+                        <input type="checkbox" name="TagsToAssign" value="@tag" />
+                    </span>
                     @:&nbsp;
                 }
             </div>
