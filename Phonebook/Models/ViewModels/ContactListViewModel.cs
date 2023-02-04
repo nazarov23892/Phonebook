@@ -21,32 +21,10 @@ namespace Phonebook.Models.ViewModels
 
         public string SortOption { get; set; }
 
-        public int PageCount {
-            get
-            {
-                int count = contacts?.Count() ?? 0;
-                int pageCount = (count / PageSize)
-                    + (count % PageSize > 0 ? 1 : 0);
-                return pageCount;
-            }
-        }
+        public int PageCount { get; set; }
 
-        public IEnumerable<Contact> Contacts 
-        {
-            get
-            {
-                if (PageNo <= 0)
-                {
-                    throw new IndexOutOfRangeException($"{nameof(this.PageNo)}={PageNo}");
-                }
-                int first = (PageNo - 1) * PageSize; ;
-                var sublist = contacts?
-                    .Skip(first)?
-                    .Take(PageSize);
-                return sublist;
-            }
-            set => contacts = value; 
-        }
+        public IEnumerable<Contact> Contacts { get; set; }
 
+        public int TotalCount { get; set; }
     }
 }

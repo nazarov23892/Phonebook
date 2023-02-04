@@ -50,10 +50,19 @@ namespace Phonebook.Controllers
             contactsRepository.FilterPhone = viewModel.FilterPhonenumber;
             contactsRepository.FilterTag = viewModel.FilterTag;
 
-
             IEnumerable<Contact> contacts = contactsRepository.Contacts;
-            viewModel.Contacts = contacts;
+            int pageCount = (contacts.Count() / PageSize)
+                + (contacts.Count() % PageSize > 0 ? 1 : 0);
+
+            int rangeStart = viewModel.PageNo * PageSize; 
+            IEnumerable<Contact> subset = contacts
+                .Skip(rangeStart)
+                .Take(PageSize);
+
+            viewModel.TotalCount = contacts.Count();
             viewModel.PageSize = PageSize;
+            viewModel.PageCount = pageCount;
+            viewModel.Contacts = subset;
             return View(viewModel);
         }
 
