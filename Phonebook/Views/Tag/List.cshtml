@@ -23,6 +23,7 @@
                 </td>
                 <td>
                     <form method="post" 
+                          onsubmit="return confirm('Deleting..\nAre you sure?');"
                           asp-controller="Tag"
                           asp-action="Delete">
                         <input name="Tag" value="@item" hidden />
@@ -37,7 +38,7 @@
     <form method="post"
           asp-controller="Tag"
           asp-action="Create">
-        <input name="Tag" />
+        <input name="Tag" maxlength="30"/>
         <button type="submit"
                 class="btn btn-primary btn-sm"
                 >add new</button>

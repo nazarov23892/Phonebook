@@ -27,6 +27,7 @@
                     <td>@contact.Phonenumber</td>
                     <td>
                         <form method="post"
+                              onsubmit="return confirm('Deleting..\nAre you sure?');"
                               asp-controller="Contact"
                               asp-action="Delete">
                             <input name="id" value="@contact.ContactId" hidden />
