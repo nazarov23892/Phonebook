@@ -13,7 +13,7 @@ namespace Phonebook.Controllers
         private IContactRepository contactsRepository;
         private ITagRepository tagsRepository;
 
-        public int PageSize { get; private set; } = 10;
+        public int PageSize { get; set; } = 10;
 
         public ContactController(IContactRepository contactsRepo, ITagRepository tagsRepo)
         {
@@ -54,7 +54,7 @@ namespace Phonebook.Controllers
             int pageCount = (contacts.Count() / PageSize)
                 + (contacts.Count() % PageSize > 0 ? 1 : 0);
 
-            int rangeStart = viewModel.PageNo * PageSize; 
+            int rangeStart = (viewModel.PageNo - 1) * PageSize; 
             IEnumerable<Contact> subset = contacts
                 .Skip(rangeStart)
                 .Take(PageSize);
