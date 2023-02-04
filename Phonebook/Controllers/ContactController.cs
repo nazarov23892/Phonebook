@@ -21,47 +21,37 @@ namespace Phonebook.Controllers
             tagsRepository = tagsRepo;
         }
 
-        public IActionResult List(int page = 1, string fname = null, string fphone = null,
-            string ftag = null, string fsort = null)
+        public IActionResult List(ContactListViewModel viewModel)
         {
             var sortOption = (Column: "", SortDir: SortDirection.Ascending);
-            if (fsort == "lastname-asc")
+            if (viewModel.SortOption == "lastname-asc")
             {
                 sortOption.Column = "Lastname";
                 sortOption.SortDir = SortDirection.Ascending;
             }
-            else if (fsort == "lastname-desc")
+            else if (viewModel.SortOption == "lastname-desc")
             {
                 sortOption.Column = "Lastname";
                 sortOption.SortDir = SortDirection.Descending;
             }
-            else if (fsort == "firstname-asc")
+            else if (viewModel.SortOption == "firstname-asc")
             {
                 sortOption.Column = "Firstname";
                 sortOption.SortDir = SortDirection.Ascending;
             }
-            else if (fsort == "firstname-desc")
+            else if (viewModel.SortOption == "firstname-desc")
             {
                 sortOption.Column = "Firstname";
                 sortOption.SortDir = SortDirection.Descending;
             }
             contactsRepository.SortColumn = sortOption.Column;
             contactsRepository.SortDirection = sortOption.SortDir;
-            contactsRepository.FilterName = fname;
-            contactsRepository.FilterPhone = fphone;
-            contactsRepository.FilterTag = ftag;
+            contactsRepository.FilterName = viewModel.FilterName;
+            contactsRepository.FilterPhone = viewModel.FilterPhonenumber;
+            contactsRepository.FilterTag = viewModel.FilterTag;
 
             IEnumerable<Contact> contacts = contactsRepository.Contacts;
-            ContactListViewModel viewModel = new ContactListViewModel
-            {
-                PageSize = this.PageSize,
-                Contacts = contacts,
-                PageNo = page,
-                FilterName = fname,
-                FilterPhonenumber = fphone,
-                FilterTag = ftag,
-                SortOption = fsort
-            };
+            viewModel.Contacts = contacts;
             return View(viewModel);
         }
 

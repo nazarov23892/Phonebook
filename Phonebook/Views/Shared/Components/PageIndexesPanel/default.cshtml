@@ -5,17 +5,15 @@
     int pageLast = ViewBag.PageLast;
 }
 
-
-    @*<nav aria-label="...">*@
     <ul class="pagination">
         <li class="page-item">
             <a asp-controller="Contact"
                asp-action="List"
-               asp-route-page="1"
-               asp-route-fname="@Model.FilterName"
-               asp-route-fphone="@Model.FilterPhonenumber"
-               asp-route-ftag="@Model.FilterTag"
-               asp-route-fsort="@Model.SortOption"
+               asp-route-PageNo="1"
+               asp-route-FilterName="@Model.FilterName"
+               asp-route-FilterPhonenumber="@Model.FilterPhonenumber"
+               asp-route-FilterTag="@Model.FilterTag"
+               asp-route-SortOption="@Model.SortOption"
                class="page-link">Первая</a>
         </li>
         @for (int i = pageFirst; i <= pageLast; i++)
@@ -27,23 +25,23 @@
             <li class="@btnclass">
                 <a asp-controller="Contact"
                    asp-action="List"
-                   asp-route-page="@i"
-                   asp-route-fname="@Model.FilterName"
-                   asp-route-fphone="@Model.FilterPhonenumber"
-                   asp-route-ftag="@Model.FilterTag"
-                   asp-route-fsort="@Model.SortOption"
+                   asp-route-PageNo="@i"
+                   asp-route-FilterName="@Model.FilterName"
+                   asp-route-FilterPhonenumber="@Model.FilterPhonenumber"
+                   asp-route-FilterTag="@Model.FilterTag"
+                   asp-route-SortOption="@Model.SortOption"
                    class="@btnclass">@(i)</a>
             </li>
         }
         <li class="page-item">
             <a asp-controller="Contact"
                asp-action="List"
-               asp-route-page="@Model.PageCount"
-               asp-route-fname="@Model.FilterName"
-               asp-route-fphone="@Model.FilterPhonenumber"
-               asp-route-ftag="@Model.FilterTag"
-               asp-route-fsort="@Model.SortOption"
+               asp-route-PageNo="@Model.PageCount"
+               asp-route-FilterName="@Model.FilterName"
+               asp-route-FilterPhonenumber="@Model.FilterPhonenumber"
+               asp-route-FilterTag="@Model.FilterTag"
+               asp-route-SortOption="@Model.SortOption"
                class="page-link">Последняя</a>
         </li>
     </ul>
-    @*</nav>*@
+
