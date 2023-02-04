@@ -50,8 +50,10 @@ namespace Phonebook.Controllers
             contactsRepository.FilterPhone = viewModel.FilterPhonenumber;
             contactsRepository.FilterTag = viewModel.FilterTag;
 
+
             IEnumerable<Contact> contacts = contactsRepository.Contacts;
             viewModel.Contacts = contacts;
+            viewModel.PageSize = PageSize;
             return View(viewModel);
         }
 
