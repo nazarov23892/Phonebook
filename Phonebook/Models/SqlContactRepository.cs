@@ -7,11 +7,16 @@ namespace Phonebook.Models
 {
     public class SqlContactRepository : IContactRepository
     {
-        private const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private ContactDbTool contactsDbTool;
+        private TagDbTool tagsDbTool;
+        private ContactsTagsDbTool contactsTagsDbTool;
 
-        private ContactDbTool contactsDbTool = new ContactDbTool { ConnectionString = connectionString };
-        private TagDbTool tagsDbTool = new TagDbTool { ConnectionString = connectionString };
-        private ContactsTagsDbTool contactsTagsDbTool = new ContactsTagsDbTool { ConnectionString = connectionString };
+        public SqlContactRepository(string connectionString)
+        {
+            contactsDbTool = new ContactDbTool { ConnectionString = connectionString };
+            tagsDbTool = new TagDbTool { ConnectionString = connectionString };
+            contactsTagsDbTool = new ContactsTagsDbTool { ConnectionString = connectionString };
+        }
 
         public IEnumerable<Contact> Contacts
         {
