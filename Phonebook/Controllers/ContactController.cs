@@ -23,7 +23,6 @@ namespace Phonebook.Controllers
 
         public IActionResult List(ContactListViewModel viewModel)
         {
-             //todo: add note when empty list
             var sortOption = (Column: "", SortDir: SortDirection.Ascending);
             if (viewModel.SortOption == "lastname-asc")
             {

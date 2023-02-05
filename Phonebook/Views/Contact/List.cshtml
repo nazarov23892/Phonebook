@@ -2,6 +2,7 @@
 @model ContactListViewModel
 @{
     ViewBag.Title = "list";
+    IEnumerable<Contact> conactList = Model.Contacts ?? Enumerable.Empty<Contact>();
 }
 
 <div class="row">
@@ -18,7 +19,7 @@
                 <th>phone</th>
                 <th>actions</th>
             </tr>
-            @foreach (var contact in Model.Contacts ?? Enumerable.Empty<Contact>())
+            @foreach (var contact in conactList)
             {
                 <tr>
                     <td>@contact.Lastname</td>
@@ -43,6 +44,12 @@
                                     class="btn btn-danger btn-sm">delete</button>
                         </form>
                     </td>
+                </tr>
+            }
+            @if (conactList.Count() == 0)
+            {
+                <tr>
+                    <td colspan="5">data not found..</td>
                 </tr>
             }
         </table>
