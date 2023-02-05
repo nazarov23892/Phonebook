@@ -22,6 +22,13 @@ namespace Phonebook.Models
                 from ContactsTags ct
                 where ct.ContactId = @contactId";
 
+        private const string deleteByTagString =
+               @"delete ct
+                from ContactsTags ct
+                left outer join Tags t on t.TagId = ct.TagId
+                where 
+                t.Tag = @tag";
+
         public int Insert(int contactId, string tag)
         {
             var parameters = new[]
@@ -47,6 +54,22 @@ namespace Phonebook.Models
             };
             int? result = ExecuteSqlCommand(
                 sqlCommand: deleteString,
+                sqlParameters: parameters,
+                sqlExecuteMode: CommandExecuteMode.NonQuery) as int?;
+
+            return result.HasValue
+                ? result.Value
+                : 0;
+        }
+
+        public int DeleteByTag(string tag)
+        {
+            var parameters = new[]
+            {
+                new SqlParameter { ParameterName = "@tag", Value = tag }
+            };
+            int? result = ExecuteSqlCommand(
+                sqlCommand: deleteByTagString,
                 sqlParameters: parameters,
                 sqlExecuteMode: CommandExecuteMode.NonQuery) as int?;
 

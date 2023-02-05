@@ -7,10 +7,10 @@ namespace Phonebook.Models
 {
     public class SqlTagRepository : ITagRepository
     {
-        private TagDbTool tagsDbTool = new TagDbTool
-        {
-            ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-        };
+        private const string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Phonebook;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+        private TagDbTool tagsDbTool = new TagDbTool { ConnectionString = connectionString };
+        private ContactsTagsDbTool contactsTagsDbTool = new ContactsTagsDbTool { ConnectionString = connectionString };
 
         public IEnumerable<string> Tags
         {
@@ -24,6 +24,7 @@ namespace Phonebook.Models
 
         public void DeleteTag(string tag)
         {
+            contactsTagsDbTool.DeleteByTag(tag);
             tagsDbTool.Delete(tag);
         }
 
