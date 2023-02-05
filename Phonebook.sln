@@ -7,7 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phonebook", "Phonebook\Phon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactsGenerateUtil", "ContactsGenerateUtil\ContactsGenerateUtil.csproj", "{5AED0BE2-3202-42DB-BF7F-9DF158D88165}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phonebook.Tests", "Phonebook.Tests\Phonebook.Tests.csproj", "{698E5DA4-B65C-4420-ABCF-569737780039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phonebook.Tests", "Phonebook.Tests\Phonebook.Tests.csproj", "{698E5DA4-B65C-4420-ABCF-569737780039}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DbScripts", "DbScripts", "{8CFFEB8D-D1EC-4293-8D63-218CD3E9EE8F}"
+	ProjectSection(SolutionItems) = preProject
+		create-table-contacts.sql = create-table-contacts.sql
+		create-table-contactstags.sql = create-table-contactstags.sql
+		create-table-tags.sql = create-table-tags.sql
+		data-contacts.sql = data-contacts.sql
+		data-contactstags.sql = data-contactstags.sql
+		data-tags.sql = data-tags.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
