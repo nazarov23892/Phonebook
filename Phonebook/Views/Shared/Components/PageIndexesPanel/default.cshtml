@@ -14,7 +14,7 @@
                asp-route-FilterPhonenumber="@Model.FilterPhonenumber"
                asp-route-FilterTag="@Model.FilterTag"
                asp-route-SortOption="@Model.SortOption"
-               class="page-link">Первая</a>
+               class="page-link">First</a>
         </li>
         @for (int i = pageFirst; i <= pageLast; i++)
         {
@@ -36,12 +36,12 @@
         <li class="page-item">
             <a asp-controller="Contact"
                asp-action="List"
-               asp-route-PageNo="@Model.PageCount"
+               asp-route-PageNo="@(Model.PageCount > 0 ? Model.PageCount : 1)"
                asp-route-FilterName="@Model.FilterName"
                asp-route-FilterPhonenumber="@Model.FilterPhonenumber"
                asp-route-FilterTag="@Model.FilterTag"
                asp-route-SortOption="@Model.SortOption"
-               class="page-link">Последняя</a>
+               class="page-link">Last</a>
         </li>
     </ul>
 

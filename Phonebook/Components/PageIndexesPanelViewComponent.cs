@@ -19,7 +19,8 @@ namespace Phonebook.Models.ViewModels
                 : 1;
             int pageLast = pageFirst + 2 * PageNeightboreNum < model.PageCount
                 ? pageFirst + 2 * PageNeightboreNum
-                : model.PageCount;
+                : (model.PageCount > 0 ? model.PageCount : 1);
+
             int range = pageLast - pageFirst;
 
             if (range < 2 * PageNeightboreNum)
